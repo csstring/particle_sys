@@ -20,6 +20,7 @@ Simulator::~Simulator()
 void Simulator::initialize(uint32 particlecount)
 {
   this->_scean = new Scean(particlecount);
+  this->_scean->initialize();
 }
 
 void Simulator::draw(void)
@@ -31,5 +32,5 @@ void Simulator::draw(void)
 
 void Simulator::update(float delta, const Shader& shader,const Camera& camera)
 {
-  _scean->update(camera);
+  _scean->update(camera, delta);
 }

@@ -19,6 +19,6 @@ class Scean : Noncopyable
 
     void initialize();
 
-    void update(const Camera& camera);
+    void update(const Camera& camera, float dt);
     void draw();
 };

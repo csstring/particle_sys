@@ -1,4 +1,6 @@
 #include "Mygui.h"
+#include "Camera.h"
+
 void Mygui::initialize(GLFWwindow* window)
 {
   IMGUI_CHECKVERSION();
@@ -11,7 +13,7 @@ void Mygui::initialize(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init();
 }
 
-void Mygui::update(void)
+void Mygui::update(Camera cam)
 {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -22,6 +24,7 @@ void Mygui::update(void)
   ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+  ImGui::Text("carmera pos x : %f y : %f z : %f", cam._cameraPos.x, cam._cameraPos.y, cam._cameraPos.z);
 }
 
 void Mygui::render(void)

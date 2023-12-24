@@ -9,9 +9,9 @@ void Scean::initialize()
   _particleManager.initialize();
 }
 
-void Scean::update(const Camera& camera)
+void Scean::update(const Camera& camera, float dt)
 {
-  _particleManager.update(camera);
+  _particleManager.update(dt);
 }
 
 void Scean::draw()

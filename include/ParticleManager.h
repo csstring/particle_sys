@@ -20,7 +20,7 @@ class ParticleManager : Noncopyable
     ~ParticleManager();//delete data
 
     void initialize();
-    void update(const Camera& camera);
+    void update(float dt);
     void draw();
 
 };

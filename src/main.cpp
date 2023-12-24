@@ -59,9 +59,9 @@ int main(int ac, char** av)
     }
 
     Window window;
-    Shader shader("./shaderSource/VertexShader.glsl",
-    "./shaderSource/FragmentShader.glsl",
-    "./shaderSource/GeometryShader.glsl");
+    Shader shader("./shaderSource/VertexShaderTest.glsl",
+    "./shaderSource/FragmentShaderTest.glsl",
+    "./shaderSource/GeometryShaderTest.glsl");
     
     window.initialize();
     _camera.initialize();
@@ -81,7 +81,7 @@ int main(int ac, char** av)
     while (window.isWindowClose() == false)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mygui.update();
+        mygui.update(_camera);
         shader.use();
         double delta = getMilisecondTime(curTime, beforeTime) * 0.05;
         window.processInput(delta , _camera);
@@ -90,7 +90,6 @@ int main(int ac, char** av)
  
         shader.setMat4("projection", projection);
         shader.setMat4("view", _camera._view);
-        shader.setVec3("LightPosition_worldspace", glm::vec3(4,4,4));
         simulator.update(delta, shader, _camera);
         simulator.draw();
         beforeTime = curTime;
