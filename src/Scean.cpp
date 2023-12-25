@@ -7,11 +7,12 @@
 void Scean::initialize()
 {
   _particleManager.initialize();
+  _CVManager.initialize(_particleManager.posID, _particleManager.getParticleCount());
 }
 
 void Scean::update(const Camera& camera, float dt)
 {
-  _particleManager.update(dt);
+  _CVManager.update(dt);
 }
 
 void Scean::draw()

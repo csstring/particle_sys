@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
  
-#ifdef __APPLE__
 #include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif
+
  
 #define MAX_SOURCE_SIZE (0x100000)
- 
+
 int main(void) {
     // Create the two input vectors
     int i;
@@ -42,7 +39,6 @@ int main(void) {
     cl_int ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
     ret = clGetDeviceIDs( platform_id, CL_DEVICE_TYPE_DEFAULT, 1, 
             &device_id, &ret_num_devices);
- 
     // Create an OpenCL context
     cl_context context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
  

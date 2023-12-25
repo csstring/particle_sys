@@ -1,9 +1,9 @@
 CXX = c++ 
 # 컴파일 플래그
 #CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-CXXFLAGS = -std=c++17 -O3
+CXXFLAGS = -std=c++17 -O3 -g
 # 링크 플래그
-LDFLAGS = 
+LDFLAGS = -fsanitize=address -g
 # 소스코드 파일 경로
 SRC_DIR = ./src
 # 오브젝트 파일 경로
@@ -26,7 +26,7 @@ OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(patsubst $(SRC_DIR)/imgui
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) $(LDFLAGS) -o $@ $^ -L$(GLFW_LIB_DIR) -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit
+	$(CXX) $(LDFLAGS) -o $@ $^ -L$(GLFW_LIB_DIR) -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework OpenCL
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -I$(INC_DIR)/imgui -c $< -o $@

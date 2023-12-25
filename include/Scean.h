@@ -3,13 +3,15 @@
 #include <map>
 #include <utility>
 #include "ParticleManager.h"
+#include "CVManager.h"
 
 class Camera;
 class Scean : Noncopyable
 {
   private:
     ParticleManager _particleManager;
-
+    CVManager _CVManager;
+    
   public:
     Scean() = delete;
     Scean(uint32 particleCount)
