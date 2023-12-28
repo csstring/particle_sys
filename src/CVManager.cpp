@@ -3,7 +3,7 @@
 #include <sstream>
 #include <OpenGL/OpenGL.h>
 
-void CVManager::initialize(uint32 VBO, uint64 count)
+void CVManager::initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count)
 {
   std::ifstream sourceCodeStream("./kernelSource/particle_sys.cl", std::ios::in);
   std::string kernerCode;
@@ -56,7 +56,8 @@ void CVManager::initialize(uint32 VBO, uint64 count)
     std::cout << ret << std::endl;
     ft_assert("clCreateCommandQueue");
   }
-  clVBO = clCreateFromGLBuffer(context, CL_MEM_WRITE_ONLY, VBO, &ret);
+  for (int i =0; i < MAXBUFFERSIZE; ++i)
+    clVBO[i] = clCreateFromGLBuffer(context, CL_MEM_WRITE_ONLY, VBO[i], &ret);
   if (ret != 0){
     std::cout << ret << std::endl;
     ft_assert("clCreateFromGLBuffer");
@@ -79,33 +80,23 @@ void CVManager::initialize(uint32 VBO, uint64 count)
     ft_assert("clCreateKernel");
   }
 
-  global_item_size = count;
+  global_item_size = count / MAXBUFFERSIZE;
   local_item_size = 64;
 }
 
-void CVManager::update(float dt)
+void CVManager::update(float dt, uint32 curBufferIdx)
 {
-    static size_t quarterIndex = 0;
-    const size_t totalParticles = global_item_size;  // Total number of particles
-    const size_t quarterSize = totalParticles / 4;  // Size of each quarter
     dt *= 0.0005;
 
-    clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
+    clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO[curBufferIdx]);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
 
-    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
+    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO[curBufferIdx], 0, nullptr, nullptr);
+    clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, &local_item_size, 0, nullptr, nullptr);
 
-    // Calculate the starting point for this update
-    size_t global_work_offset = quarterIndex * quarterSize;
-
-    // Update only a quarter of the particles
-    clEnqueueNDRangeKernel(command_queue, kernel, 1, &global_work_offset, &totalParticles, &local_item_size, 0, nullptr, nullptr);
-
-    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
+    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO[curBufferIdx], 0, nullptr, nullptr);
     clFinish(command_queue);
 
-    // Move to the next quarter for the next update
-    quarterIndex = (quarterIndex + 1) % 4;
 }
 
 CVManager::~CVManager()
@@ -114,7 +105,8 @@ CVManager::~CVManager()
   ret = clFinish(command_queue);
   ret = clReleaseKernel(kernel);
   ret = clReleaseProgram(program);
-  ret = clReleaseMemObject(clVBO);
+  for (int i =0; i < MAXBUFFERSIZE; ++i)
+    ret = clReleaseMemObject(clVBO[i]);
   ret = clReleaseCommandQueue(command_queue);
   ret = clReleaseContext(context);
 }

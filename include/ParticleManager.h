@@ -14,7 +14,7 @@ class ParticleManager : Noncopyable
 
   public:
     glm::vec3 _camPos;
-    uint32 posID;
+    uint32 posID[MAXBUFFERSIZE];
 
   public:
     ParticleManager(uint32 count) : _particleCount(count){};

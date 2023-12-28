@@ -12,7 +12,9 @@ void Scean::initialize()
 
 void Scean::update(const Camera& camera, float dt)
 {
-  _CVManager.update(dt);
+  static uint64 bufferCount = 0;
+  _CVManager.update(dt, bufferCount);
+  bufferCount = (bufferCount + 1) % MAXBUFFERSIZE;
 }
 
 void Scean::draw()

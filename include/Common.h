@@ -29,6 +29,7 @@ const float WINDOW_HEIGHT = 960;
 const uint32 MapLength = 16384;
 const uint32 MapHight = 256;
 const float OVERLAPTIME = 200;
+constexpr uint32 MAXBUFFERSIZE = 4;
 class Noncopyable
 {
     public:

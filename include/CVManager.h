@@ -12,7 +12,7 @@ class CVManager
     cl_int ret;
     cl_context context;
     cl_command_queue command_queue;
-    cl_mem clVBO;
+    cl_mem clVBO[MAXBUFFERSIZE];
     cl_program program;
     cl_kernel kernel;
     uint64 global_item_size = 1024;
@@ -21,6 +21,6 @@ class CVManager
   public:
     CVManager(){};
     ~CVManager();
-    void initialize(uint32 VBO, uint64 count);
-    void update(float dt);
+    void initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count);
+    void update(float dt, uint32 curBufferIdx);
 };
