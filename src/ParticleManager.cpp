@@ -39,8 +39,8 @@ void ParticleManager::initialize()
     p._velocity = glm::vec3(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen));
     // p._velocity = glm::vec3(0.0f);
     p._color = rainbow[dc(gen)];
-    p._radius = (dp(gen) + 1.3f) * 1.02f;
-    p._life = 1.0f;
+    // p._radius = (dp(gen) + 1.3f) * 1.02f;
+    // p._life = 1.0f;
   }
 
   glGenVertexArrays(1, &_VAO);
@@ -61,13 +61,13 @@ void ParticleManager::initialize()
   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _color));
   glEnableVertexAttribArray(2);
 
-  // Life
-  glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
-  glEnableVertexAttribArray(3);
+  // // Life
+  // glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
+  // glEnableVertexAttribArray(3);
 
-  // Radius
-  glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _radius));
-  glEnableVertexAttribArray(4);
+  // // Radius
+  // glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _radius));
+  // glEnableVertexAttribArray(4);
 
   glBindVertexArray(0);
 }

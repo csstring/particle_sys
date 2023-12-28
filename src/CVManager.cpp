@@ -85,13 +85,27 @@ void CVManager::initialize(uint32 VBO, uint64 count)
 
 void CVManager::update(float dt)
 {
-  dt *= 0.0005;
-  clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
-  clSetKernelArg(kernel, 1, sizeof(float), &dt);
-  clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
-  clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, &local_item_size, 0, nullptr, nullptr);
-  clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
-  clFinish(command_queue);
+    static size_t quarterIndex = 0;
+    const size_t totalParticles = global_item_size;  // Total number of particles
+    const size_t quarterSize = totalParticles / 4;  // Size of each quarter
+    dt *= 0.0005;
+
+    clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
+    clSetKernelArg(kernel, 1, sizeof(float), &dt);
+
+    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
+
+    // Calculate the starting point for this update
+    size_t global_work_offset = quarterIndex * quarterSize;
+
+    // Update only a quarter of the particles
+    clEnqueueNDRangeKernel(command_queue, kernel, 1, &global_work_offset, &totalParticles, &local_item_size, 0, nullptr, nullptr);
+
+    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
+    clFinish(command_queue);
+
+    // Move to the next quarter for the next update
+    quarterIndex = (quarterIndex + 1) % 4;
 }
 
 CVManager::~CVManager()

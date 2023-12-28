@@ -81,12 +81,12 @@ void cvcheck()
 
     }
     free(devices);
-}
-if (strstr(info, "cl_khr_gl_sharing")) {
-    std::cout << "\tSupports cl_khr_gl_sharing" << std::endl;
-}
-free(platforms);
-}
+    }
+    if (strstr(info, "cl_khr_gl_sharing")) {
+        std::cout << "\tSupports cl_khr_gl_sharing" << std::endl;
+    }
+    free(platforms);
+    }
 }
 
 int main(int ac, char** av) 
@@ -111,7 +111,8 @@ int main(int ac, char** av)
     mygui.initialize(window._window);
 
     Simulator simulator;
-    simulator.initialize(std::atoi(av[1]));
+    simulator.initialize(std::ceil(std::atof(av[1]) / 64.0f) * 64.0f);
+    std::cout << std::ceil(std::atof(av[1]) / 64.0f) * 64.0f << std::endl;
     // camera mouse call
     glfwSetFramebufferSizeCallback(window._window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window._window, mouse_callback);

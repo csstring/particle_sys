@@ -29,13 +29,13 @@ void Window::initialize(void)
 
     clearColorSetUp();
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_PROGRAM_POINT_SIZE);
+    // glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_CULL_FACE);
-    glPointSize(5);
+    // glPointSize(5);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW); 
     glDepthFunc(GL_LESS);
-    glfwSwapInterval(1);
+    // glfwSwapInterval(1);
 }
 
 void Window::processInput(float delta, Camera& camera)

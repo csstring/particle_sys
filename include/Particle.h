@@ -8,8 +8,8 @@ struct alignas(16) Particle
   float p2 = 0.0f;
   glm::vec3 _color;
   float p3 = 0.0f;
-  float _life = 0.0f;
-  float p4 = 0.0f;
-  float _radius = 1.0f;
-  float p5 = 0.0f;
+  // float _life = 0.0f;
+  // float p4 = 0.0f;
+  // float _radius = 1.0f;
+  // float p5 = 0.0f;
 };
