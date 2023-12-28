@@ -133,6 +133,7 @@ int main(int ac, char** av)
  
         shader.setMat4("projection", projection);
         shader.setMat4("view", _camera._view);
+        glFinish();
         simulator.update(delta, shader, _camera);
         simulator.draw();
         beforeTime = curTime;

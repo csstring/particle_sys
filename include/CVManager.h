@@ -21,6 +21,6 @@ class CVManager
   public:
     CVManager(){};
     ~CVManager();
-    void initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count);
+    void initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count, uint32 VAO);
     void update(float dt, uint32 curBufferIdx);
 };

@@ -7,7 +7,7 @@
 void Scean::initialize()
 {
   _particleManager.initialize();
-  _CVManager.initialize(_particleManager.posID, _particleManager.getParticleCount());
+  _CVManager.initialize(_particleManager.posID, _particleManager.getParticleCount(), _particleManager._VAO);
 }
 
 void Scean::update(const Camera& camera, float dt)

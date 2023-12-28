@@ -14,7 +14,8 @@ ParticleManager::~ParticleManager()
 // uint32 _VAO, velID, posID, colorID ,lifeID,radID ;
 void ParticleManager::initialize()
 {
-  _particles.resize(_particleCount);
+  for (int i =0; i < MAXBUFFERSIZE; ++i)
+    _particles[i].resize(_particleCount);
   const std::vector<glm::vec3> rainbow = {
         {1.0f, 0.0f, 0.0f},  // Red
         {1.0f, 0.65f, 0.0f}, // Orange
@@ -33,26 +34,24 @@ void ParticleManager::initialize()
   std::uniform_real_distribution<float> randomSpeed(-2.0f, 2.0f);
   std::uniform_real_distribution<float> randomLife(0.0f, 1.0f);
 
-  for (auto& p : _particles){
-    const float theta = randomTheta(gen);
-    p._position = glm::vec3(cos(theta), -sin(theta), 0.0) * randomLife(gen) * 0.1f +
-                    glm::vec3(0.0f, -0.3f, 0.0f);
-    p._velocity = glm::vec3(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen));
-    // p._velocity = glm::vec3(0.0f);
-    p._color = rainbow[dc(gen)];
-    // p._radius = (dp(gen) + 1.3f) * 1.02f;
-    // p._life = 1.0f;
+  for (int i =0; i < MAXBUFFERSIZE; ++i){
+    for (auto& p : _particles[i]){
+      const float theta = randomTheta(gen);
+      p._position = glm::vec3(cos(theta), -sin(theta), 0.0) * randomLife(gen) * 0.1f +
+                      glm::vec3(0.0f, -0.3f, 0.0f);
+      p._velocity = glm::vec3(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen));
+      p._color = rainbow[dc(gen)];
+    }
   }
 
   glGenVertexArrays(1, &_VAO);
   glBindVertexArray(_VAO);
-  const uint64 chunkSize = _particleCount/MAXBUFFERSIZE;
+  glGenBuffers(MAXBUFFERSIZE, posID);
   for (int i =0; i < MAXBUFFERSIZE; ++i)
   {
-    glGenBuffers(1, &posID[i]);
     glBindBuffer(GL_ARRAY_BUFFER, posID[i]);
-    glBufferData(GL_ARRAY_BUFFER, chunkSize * sizeof(Particle), _particles.data() + sizeof(Particle) * chunkSize * i, GL_DYNAMIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, _particles[i].size() * sizeof(Particle), _particles[i].data(), GL_DYNAMIC_DRAW);
+  }
     // Position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
     glEnableVertexAttribArray(0);
@@ -64,22 +63,22 @@ void ParticleManager::initialize()
     // Color
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _color));
     glEnableVertexAttribArray(2);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+}
 
-    // // Life
-    // glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
-    // glEnableVertexAttribArray(3);
-
-    // // Radius
-    // glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _radius));
-    // glEnableVertexAttribArray(4);
-
-    glBindVertexArray(0);
+void ParticleManager::draw()
+{
+  glBindVertexArray(_VAO);
+  for (int i =0; i < MAXBUFFERSIZE; ++i){
+    glBindBuffer(GL_ARRAY_BUFFER, posID[i]);
+    glDrawArrays(GL_POINTS, 0, _particleCount);
   }
+  glBindVertexArray(0);
 }
 
 void ParticleManager::update(float dt)
 { 
-  // dt *= 0.005;
   // std::random_device rd;
   // std::mt19937 gen(rd());
   // std::uniform_real_distribution<float> randomTheta(-3.141592f, 3.141592f);
@@ -114,9 +113,3 @@ void ParticleManager::update(float dt)
   // }
 }
 
-void ParticleManager::draw()
-{
-  glBindVertexArray(_VAO);
-  glDrawArrays(GL_POINTS, 0, _particleCount);
-  glBindVertexArray(0);
-}

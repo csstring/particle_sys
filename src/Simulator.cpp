@@ -31,6 +31,6 @@ void Simulator::draw(void)
 }
 
 void Simulator::update(float delta, const Shader& shader,const Camera& camera)
-{
+{       
   _scean->update(camera, delta);
 }

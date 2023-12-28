@@ -1,13 +1,14 @@
+#include "GL/glew.h"
 #include "CVManager.h"
 #include <fstream>
 #include <sstream>
 #include <OpenGL/OpenGL.h>
 
-void CVManager::initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count)
+void CVManager::initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count, uint32 VAO)
 {
   std::ifstream sourceCodeStream("./kernelSource/particle_sys.cl", std::ios::in);
   std::string kernerCode;
-  
+  glBindVertexArray(VAO);
   if (sourceCodeStream.is_open())
   {
     std::stringstream ss;
@@ -56,11 +57,12 @@ void CVManager::initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count)
     std::cout << ret << std::endl;
     ft_assert("clCreateCommandQueue");
   }
-  for (int i =0; i < MAXBUFFERSIZE; ++i)
+  ret = 0;
+  for (int i =0; i < MAXBUFFERSIZE; ++i){
     clVBO[i] = clCreateFromGLBuffer(context, CL_MEM_WRITE_ONLY, VBO[i], &ret);
-  if (ret != 0){
-    std::cout << ret << std::endl;
-    ft_assert("clCreateFromGLBuffer");
+    if (ret != 0){
+      ft_assert("clCreateFromGLBuffer");
+    }
   }
   const char* code = kernerCode.c_str();
   size_t tmplength = kernerCode.size();
@@ -80,23 +82,23 @@ void CVManager::initialize(uint32 VBO[MAXBUFFERSIZE], uint64 count)
     ft_assert("clCreateKernel");
   }
 
-  global_item_size = count / MAXBUFFERSIZE;
+  global_item_size = count;
+  std::cout << "global_item_size" << global_item_size << std::endl;
   local_item_size = 64;
+  glBindVertexArray(0);
 }
 
 void CVManager::update(float dt, uint32 curBufferIdx)
 {
-    dt *= 0.0005;
-
-    clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO[curBufferIdx]);
+  dt *= 0.0005;
+  for (int i =0; i < MAXBUFFERSIZE; ++i){
+    clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO[i]);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
-
-    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO[curBufferIdx], 0, nullptr, nullptr);
+    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO[i], 0, nullptr, nullptr);
     clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, &local_item_size, 0, nullptr, nullptr);
-
-    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO[curBufferIdx], 0, nullptr, nullptr);
+    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO[i], 0, nullptr, nullptr);
     clFinish(command_queue);
-
+  }
 }
 
 CVManager::~CVManager()

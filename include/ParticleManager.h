@@ -8,16 +8,16 @@ class Camera;
 class ParticleManager : Noncopyable
 {
   private:
-    std::vector<Particle> _particles;
+    std::vector<Particle> _particles[MAXBUFFERSIZE];
     uint32 _particleCount;
-    uint32 _VAO;
 
   public:
+    uint32 _VAO;
     glm::vec3 _camPos;
     uint32 posID[MAXBUFFERSIZE];
 
   public:
-    ParticleManager(uint32 count) : _particleCount(count){};
+    ParticleManager(uint32 count) : _particleCount(count / MAXBUFFERSIZE){};
     ~ParticleManager();//delete data
 
     void initialize();
