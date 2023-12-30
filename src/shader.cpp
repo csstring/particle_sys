@@ -8,7 +8,7 @@
 #include "GL/glew.h"
 #include "shader.h"
 
-Shader::Shader(const char* vertexRelativePath,const char* fragmentRelativePath, const char* geometryRelativePath)
+void Shader::initialize(const char* vertexRelativePath,const char* fragmentRelativePath, const char* geometryRelativePath) 
 {
 	std::filesystem::path vertexPath(vertexRelativePath);
 	std::filesystem::path geometryPath(geometryRelativePath);
@@ -17,11 +17,6 @@ Shader::Shader(const char* vertexRelativePath,const char* fragmentRelativePath, 
 	_vertexFullPath.assign(std::filesystem::canonical(vertexPath));
 	_geometryFullPath.assign(std::filesystem::canonical(geometryPath));
 	_fragmentFullPath.assign(std::filesystem::canonical(fragmentPath));
-}
-
-void Shader::initialize() 
-{
-
 	// Create the shaders
 	uint32 VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	uint32 GeometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
@@ -151,39 +146,4 @@ void Shader::initialize()
 void Shader::use(void)
 {
 	glUseProgram(_programId);
-}
-
-void Shader::setMat4(const std::string &name, glm::mat4 mat4) const
-{
-    glUniformMatrix4fv(glGetUniformLocation(_programId, name.c_str()),1, false, &mat4[0].x);
-}
-
-void Shader::setVec3(const std::string &name, glm::vec3 vec3) const
-{
-    glUniform3fv(glGetUniformLocation(_programId, name.c_str()), 1, &vec3.x);
-}
-
-void Shader::setUint(const std::string &name, unsigned int index) const
-{
-    glUniform1ui(glGetUniformLocation(_programId, name.c_str()), index);
-}
-
-void Shader::setFloat(const std::string &name, float index) const
-{
-    glUniform1f(glGetUniformLocation(_programId, name.c_str()), index);
-}
-
-void Shader::textureUpdate()
-{
-	GLint dirtLocation = glGetUniformLocation(_programId, "dirt");
-	GLint grassSideLocation = glGetUniformLocation(_programId, "grass_side");
-	GLint grassTopLocation = glGetUniformLocation(_programId, "grass_top");
-	GLint snowBlockLocation = glGetUniformLocation(_programId, "SNOW_SNOW_BLOCK");
-	GLint snowStoneLocation = glGetUniformLocation(_programId, "SNOW_STONE");
-
-	glUniform1i(dirtLocation, 0); // Bind to texture unit 0
-	glUniform1i(grassSideLocation, 1); // Bind to texture unit 1
-	glUniform1i(grassTopLocation, 2); // Bind to texture unit 2
-	glUniform1i(snowBlockLocation, 3); // Bind to texture unit 3
-	glUniform1i(snowStoneLocation, 4); // Bind to texture unit 4
 }

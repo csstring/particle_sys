@@ -33,36 +33,31 @@ void Window::initialize(void)
     glEnable(GL_CULL_FACE);
     // glPointSize(5);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CCW); 
+    glFrontFace(GL_CW); 
     glDepthFunc(GL_LESS);
-    // glfwSwapInterval(1);
 }
 
 void Window::processInput(float delta, Camera& camera)
 {
-    delta *= 0.05;
+    delta *= 0.3;
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
 
     if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
     {
         camera._cameraPos += delta * camera._cameraFront;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
     }
     else if (glfwGetKey(_window, GLFW_KEY_S ) == GLFW_PRESS)
     {
         camera._cameraPos -= delta * camera._cameraFront;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
     }
     else if (glfwGetKey(_window, GLFW_KEY_A ) == GLFW_PRESS)
     {
         camera._cameraPos -= camera._cameraRight * delta;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
     }
     else if (glfwGetKey(_window, GLFW_KEY_D ) == GLFW_PRESS)
     {
         camera._cameraPos += camera._cameraRight * delta;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
     }
     
 }

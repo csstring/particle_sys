@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-
+#include "EnumHeader.h"
 struct GLFWwindow;
 class Camera;
 class Mygui
@@ -10,7 +10,7 @@ class Mygui
     /* data */
   public:
     void initialize(GLFWwindow* window);
-    void update(Camera cam);
+    void update(Camera cam, SHADERINPUT& shape);
     void render(void);
     Mygui(){};
     ~Mygui();

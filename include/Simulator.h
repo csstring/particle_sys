@@ -3,7 +3,6 @@
 #include "EnumHeader.h"
 
 class Parser;
-class Shader;
 class Scean;
 class Camera;
 class Simulator : Noncopyable
@@ -22,7 +21,7 @@ class Simulator : Noncopyable
         ~Simulator();
         
         void initialize(uint32 particlecount);
-        void update(float delta, const Shader& shader,const Camera& camera);
+        void update(float delta, const Camera& camera);
         void draw(void);
 };
 

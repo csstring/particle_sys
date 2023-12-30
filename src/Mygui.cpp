@@ -13,8 +13,9 @@ void Mygui::initialize(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init();
 }
 
-void Mygui::update(Camera cam)
+void Mygui::update(Camera cam, SHADERINPUT& shape)
 {
+
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
@@ -25,11 +26,16 @@ void Mygui::update(Camera cam)
 
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   ImGui::Text("carmera pos x : %f y : %f z : %f", cam._cameraPos.x, cam._cameraPos.y, cam._cameraPos.z);
+
+  if (ImGui::Button("Circle Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+      shape = SHADERINPUT::CIRCLE;
+  if (ImGui::Button("Qurd Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+      shape = SHADERINPUT::QURD;
+  ImGui::End();
 }
 
 void Mygui::render(void)
 {
-  ImGui::End();
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

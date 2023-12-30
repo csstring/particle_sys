@@ -14,14 +14,14 @@ ParticleManager::~ParticleManager()
 void ParticleManager::initialize()
 {
   _particles.resize(_particleCount);
-  const std::vector<glm::vec3> rainbow = {
-        {1.0f, 0.0f, 0.0f},  // Red
-        {1.0f, 0.65f, 0.0f}, // Orange
-        {1.0f, 1.0f, 0.0f},  // Yellow
-        {0.0f, 1.0f, 0.0f},  // Green
-        {0.0f, 0.0f, 1.0f},  // Blue
-        {0.3f, 0.0f, 0.5f},  // Indigo
-        {0.5f, 0.0f, 1.0f}   // Violet/Purple
+  const std::vector<glm::vec4> rainbow = {
+        {1.0f, 0.0f, 0.0f, 1.0f},  // Red
+        {1.0f, 0.65f, 0.0f, 1.0f}, // Orange
+        {1.0f, 1.0f, 0.0f, 1.0f},  // Yellow
+        {0.0f, 1.0f, 0.0f, 1.0f},  // Green
+        {0.0f, 0.0f, 1.0f, 1.0f},  // Blue
+        {0.3f, 0.0f, 0.5f, 1.0f},  // Indigo
+        {0.5f, 0.0f, 1.0f, 1.0f}   // Violet/Purple
   };
 
   std::random_device rd;
@@ -33,11 +33,11 @@ void ParticleManager::initialize()
   std::uniform_real_distribution<float> randomLife(0.0f, 1.0f);
 
   for (auto& p : _particles){
-    const float theta = randomTheta(gen);
-    p._position = glm::vec3(cos(theta), -sin(theta), 0.0) * randomLife(gen) * 0.1f +
-                    glm::vec3(0.0f, -0.3f, 0.0f);
-    p._velocity = glm::vec3(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen));
-    // p._velocity = glm::vec3(0.0f);
+    const float theta = dp(gen);
+    const float theta2 = dp(gen);
+    p._position = glm::vec4(theta, theta2, 0.0, 1.0);
+    // p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
+    p._velocity = glm::vec4(0.0f);
     p._color = rainbow[dc(gen)];
     // p._radius = (dp(gen) + 1.3f) * 1.02f;
     // p._life = 1.0f;
@@ -47,18 +47,18 @@ void ParticleManager::initialize()
   glBindVertexArray(_VAO);
   glGenBuffers(1, &posID);
   glBindBuffer(GL_ARRAY_BUFFER, posID);
-  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), _particles.data(), GL_DYNAMIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), _particles.data(), GL_STATIC_DRAW);
 
   // Position
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
   glEnableVertexAttribArray(0);
 
   // Velocity
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _velocity));
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _velocity));
   glEnableVertexAttribArray(1);
 
   // Color
-  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _color));
+  glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _color));
   glEnableVertexAttribArray(2);
 
   // // Life
@@ -112,7 +112,6 @@ void ParticleManager::update(float dt)
 void ParticleManager::draw()
 {
   glBindVertexArray(_VAO);
-  // glBindBuffer(GL_ARRAY_BUFFER, posID);
   glDrawArrays(GL_POINTS, 0, _particleCount);
   glBindVertexArray(0);
 }

@@ -15,3 +15,9 @@ enum BoxTexture {
   SNOW_SNOW_BLOCK,
   SNOW_STONE
 };
+
+enum class SHADERINPUT
+{
+  CIRCLE,
+  QURD
+};

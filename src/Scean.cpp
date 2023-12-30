@@ -12,7 +12,10 @@ void Scean::initialize()
 
 void Scean::update(const Camera& camera, float dt)
 {
-  _CVManager.update(dt);
+  glm::vec4 gravity(0.0f, 0.0f, 0.0f, 0.0f);
+  // gravity.z += 0.2;
+  // std::cout << glm::to_string(gravity) << std::endl;
+  _CVManager.update(dt, gravity);
 }
 
 void Scean::draw()
