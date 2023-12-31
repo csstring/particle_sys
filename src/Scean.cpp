@@ -12,7 +12,8 @@ void Scean::initialize()
 
 void Scean::update(const Camera& camera, float dt)
 {
-  glm::vec4 gravity(0.0f, 0.0f, 0.0f, 0.0f);
+  const glm::vec4 gravity = camera.getWorldXYPosition();
+  std::cout << "x : " << camera._lastX << " y : " << camera._lastY << std::endl;
   // gravity.z += 0.2;
   // std::cout << glm::to_string(gravity) << std::endl;
   _CVManager.update(dt, gravity);

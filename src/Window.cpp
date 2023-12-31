@@ -40,6 +40,9 @@ void Window::initialize(void)
 void Window::processInput(float delta, Camera& camera)
 {
     delta *= 0.3;
+    static int currentMouseState,previousMouseState;
+
+    currentMouseState = glfwGetKey(_window, GLFW_KEY_SPACE);
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
 
@@ -59,7 +62,13 @@ void Window::processInput(float delta, Camera& camera)
     {
         camera._cameraPos += camera._cameraRight * delta;
     }
-    
+
+    if (currentMouseState == GLFW_RELEASE && previousMouseState == GLFW_PRESS) {
+        previousMouseState = currentMouseState;
+        camera._isOn = camera._isOn == true ? false : true;
+    } else if (currentMouseState == GLFW_PRESS && previousMouseState == GLFW_RELEASE){
+        previousMouseState = currentMouseState;
+    }
 }
 
 void Window::clearColorSetUp(float r, float g, float b, float a)

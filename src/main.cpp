@@ -25,7 +25,6 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
     ImGuiIO& io = ImGui::GetIO();
     io.AddMousePosEvent(xposIn, yposIn);
-
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
@@ -42,6 +41,8 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     _camera._lastX = xpos;
     _camera._lastY = ypos;
 
+    if (_camera._isOn == false)
+        return ;
     _camera.ProcessMouseMovement(xoffset, yoffset, true);
 }
 
@@ -113,16 +114,16 @@ int main(int ac, char** av)
     mygui.initialize(window._window);
 
     Simulator simulator;
-    simulator.initialize(std::atof(av[1]));
-    // simulator.initialize(std::ceil(std::atof(av[1]) / 64.0f) * 64.0f);
+    // simulator.initialize(std::atof(av[1]));
+    simulator.initialize(std::ceil(std::atof(av[1]) / 64.0f) * 64.0f);
     std::cout << std::ceil(std::atof(av[1]) / 64.0f) * 64.0f << std::endl;
     // camera mouse call
     glfwSetFramebufferSizeCallback(window._window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window._window, mouse_callback);
     // glfwSetScrollCallback(window._window, scroll_callback);
-    // glfwSetInputMode(window._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(window._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-    glm::mat4 projection = glm::perspective(glm::radians(_camera._fov), (float)WINDOW_WITH / (float)WINDOW_HEIGHT, _camera._zNear, _camera._zFar);
+    glm::mat4 projection = glm::perspective(glm::radians(_camera._fov), ASPECT_RATIO, _camera._zNear, _camera._zFar);
     const float delta = 1.0f / 60.0f;
     while (window.isWindowClose() == false)
     {

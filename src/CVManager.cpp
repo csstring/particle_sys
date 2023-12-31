@@ -93,7 +93,7 @@ void CVManager::update(float dt, const glm::vec4& gravity)
     static size_t quarterIndex = 0;
     const size_t totalParticles = global_item_size;  // Total number of particles
     const size_t quarterSize = totalParticles / 4;  // Size of each quarter
-    dt *= 0.1;
+    dt *= 0.4;
 
     clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
@@ -110,13 +110,13 @@ void CVManager::update(float dt, const glm::vec4& gravity)
     clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clFinish(command_queue);
 
-    ret = clEnqueueReadBuffer(command_queue, debug1, CL_TRUE, 0, 
-            totalParticles * sizeof(float), C, 0, NULL, NULL);
-    ret = clEnqueueReadBuffer(command_queue, debug2, CL_TRUE, 0, 
-            totalParticles * sizeof(float), D, 0, NULL, NULL);
-    for (int i =0; i < totalParticles; ++i){
-      std::cout << "c : "<<C[i] << "  D : " << D[i] << " dt : " << dt << std::endl;
-    }
+    // ret = clEnqueueReadBuffer(command_queue, debug1, CL_TRUE, 0, 
+    //         totalParticles * sizeof(float), C, 0, NULL, NULL);
+    // ret = clEnqueueReadBuffer(command_queue, debug2, CL_TRUE, 0, 
+    //         totalParticles * sizeof(float), D, 0, NULL, NULL);
+    // for (int i =0; i < totalParticles; ++i){
+    //   std::cout << "c : "<<C[i] << "  D : " << D[i] << " dt : " << dt << std::endl;
+    // }
     // Move to the next quarter for the next update
     quarterIndex = (quarterIndex + 1) % 4;
 }

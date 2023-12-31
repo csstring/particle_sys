@@ -23,12 +23,10 @@ typedef unsigned short      uint16;
 typedef unsigned int        uint32;
 typedef unsigned long       uint64;
 
-const float WINDOW_WITH = 1440;
-const float WINDOW_HEIGHT = 960;
+constexpr float WINDOW_WITH = 1440;
+constexpr float WINDOW_HEIGHT = 960;
+constexpr float ASPECT_RATIO = WINDOW_WITH / WINDOW_HEIGHT;
 
-const uint32 MapLength = 16384;
-const uint32 MapHight = 256;
-const float OVERLAPTIME = 200;
 class Noncopyable
 {
     public:

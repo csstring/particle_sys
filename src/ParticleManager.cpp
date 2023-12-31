@@ -33,11 +33,11 @@ void ParticleManager::initialize()
   std::uniform_real_distribution<float> randomLife(0.0f, 1.0f);
 
   for (auto& p : _particles){
-    const float theta = dp(gen);
+    const float theta = randomTheta(gen);
     const float theta2 = dp(gen);
-    p._position = glm::vec4(theta, theta2, 0.0, 1.0);
-    // p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
-    p._velocity = glm::vec4(0.0f);
+    p._position = glm::vec4(cos(theta), -sin(theta), 0.0, 1.0);
+    p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
+    // p._velocity = glm::vec4(0.0f);
     p._color = rainbow[dc(gen)];
     // p._radius = (dp(gen) + 1.3f) * 1.02f;
     // p._life = 1.0f;
@@ -73,41 +73,7 @@ void ParticleManager::initialize()
 }
 
 void ParticleManager::update(float dt)
-{ 
-  // dt *= 0.005;
-  // std::random_device rd;
-  // std::mt19937 gen(rd());
-  // std::uniform_real_distribution<float> randomTheta(-3.141592f, 3.141592f);
-  // std::uniform_real_distribution<float> randomSpeed(1.5f, 2.0f);
-  // std::uniform_real_distribution<float> randomLife(0.0f, 1.0f);
-
-  // int newCount = 5000;
-  // for (auto& p : _particles)
-  // {
-  //   if (p._life < 0.0f && newCount > 0)
-  //   {
-  //     const float theta = randomTheta(gen);
-  //     p._position = glm::vec3(cos(theta), -sin(theta), 0.0) * randomLife(gen) * 0.1f +
-  //                   glm::vec3(0.0f, -0.3f, 0.0f);
-  //     p._velocity = glm::vec3(-1.0f, 0.0f,0.0f) * randomSpeed(gen);
-  //     p._life = randomLife(gen) * 1.5;
-  //     newCount--;
-  //   }
-  // }
-  
-  // constexpr float cordi = 0.5f;
-  // constexpr float groundHeight = -1.0f;
-  // constexpr glm::vec3 gravity = glm::vec3(0.0f, -9.8f, 0.0f);
-
-  // for (auto& p : _particles)
-  // {
-  //   if (p._life < 0.0f) 
-  //     continue;
-  //   p._velocity = p._velocity + gravity *dt;
-  //   p._position += p._velocity* dt;
-  //   p._life -= dt;
-  // }
-}
+{}
 
 void ParticleManager::draw()
 {

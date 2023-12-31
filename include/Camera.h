@@ -6,7 +6,7 @@ class Camera
 {
 
     public:
-        Camera() : _yaw(-90.0f), _pitch(0.0f), _movementSpeed(2.5f), _mouseSensitivity(0.1f), _fov(80.0f), _isFirst(true)
+        Camera() : _yaw(-90.0f), _pitch(0.0f), _movementSpeed(2.5f), _mouseSensitivity(0.1f), _fov(80.0f), _isFirst(true), _isOn(false)
         {};
         ~Camera(){};
         void update(void);
@@ -14,16 +14,17 @@ class Camera
         void ProcessMouseScroll(float yoffset);
         void updateCameraVectors(void);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch);
-
+        glm::vec4 getWorldXYPosition() const;
     private:
         float _yaw;
         float _pitch;
         float _movementSpeed;
         float _mouseSensitivity;
-    
+
     public:
         float _fov;
         bool _isFirst;
+        bool _isOn;
         float _lastX;
         float _lastY;
         float _zNear = 0.1;
