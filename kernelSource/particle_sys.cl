@@ -15,14 +15,12 @@ typedef struct {
 __kernel void particle_sys(__global Particle* particles, float dt, float4 gravity, __global float* C, __global float* D) {
 
   int i = get_global_id(0);
-  Particle p = particles[i];
-  float4 dir1 = float4(p._position.x, p._position.y, p._position.z,0);
+  float4 dir1 = float4(particles[i]._position.x, particles[i]._position.y, particles[i]._position.z,0);
+  float2 tmp = float2(particles[i]._position.x, particles[i]._position.y);
+  C[i] = tmp.y;
+  D[i] = particles[i]._position.y;
 
-  p._position.x -= dir1.x * dt;
-  p._position.y -= dir1.y * dt;
-  p._position.z -= dir1.z * dt;
-//c : 1.59312  D : -0.225672 dt : 0.00166667
-  C[i] = p._position.y;
-  D[i] = dir1.y;
-  particles[i] = p;
+  particles[i]._position.x -= dir1.x * dt;
+  particles[i]._position.y -= dir1.y * dt;
+  particles[i]._position.z -= dir1.z * dt;
 }
