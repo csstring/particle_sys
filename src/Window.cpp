@@ -31,7 +31,7 @@ void Window::initialize(void)
     glEnable(GL_DEPTH_TEST);
     // glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_CULL_FACE);
-    // glPointSize(5);
+    // glPointSize(2);
     glCullFace(GL_BACK);
     glFrontFace(GL_CW); 
     glDepthFunc(GL_LESS);
@@ -39,7 +39,6 @@ void Window::initialize(void)
 
 void Window::processInput(float delta, Camera& camera)
 {
-    delta *= 0.3;
     static int currentMouseState,previousMouseState;
 
     currentMouseState = glfwGetKey(_window, GLFW_KEY_SPACE);
@@ -48,19 +47,19 @@ void Window::processInput(float delta, Camera& camera)
 
     if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        camera._cameraPos += delta * camera._cameraFront;
+        camera._cameraPos += delta* camera._movementSpeed * camera._cameraFront;
     }
     else if (glfwGetKey(_window, GLFW_KEY_S ) == GLFW_PRESS)
     {
-        camera._cameraPos -= delta * camera._cameraFront;
+        camera._cameraPos -= delta* camera._movementSpeed * camera._cameraFront;
     }
     else if (glfwGetKey(_window, GLFW_KEY_A ) == GLFW_PRESS)
     {
-        camera._cameraPos -= camera._cameraRight * delta;
+        camera._cameraPos -= camera._cameraRight * delta* camera._movementSpeed;
     }
     else if (glfwGetKey(_window, GLFW_KEY_D ) == GLFW_PRESS)
     {
-        camera._cameraPos += camera._cameraRight * delta;
+        camera._cameraPos += camera._cameraRight * delta* camera._movementSpeed;
     }
 
     if (currentMouseState == GLFW_RELEASE && previousMouseState == GLFW_PRESS) {

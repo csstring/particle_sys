@@ -65,6 +65,8 @@ void CVManager::initialize(uint32 VBO, uint64 count)
             count * sizeof(float), NULL, &ret);
   debug2 = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
             count * sizeof(float), NULL, &ret);
+  debug3 = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
+            count * sizeof(float), NULL, &ret);
   const char* code = kernerCode.c_str();
   size_t tmplength = kernerCode.size();
   program = clCreateProgramWithSource(context, 1, &code, &tmplength, &ret);
@@ -84,6 +86,7 @@ void CVManager::initialize(uint32 VBO, uint64 count)
   }
   C = (float*)malloc(sizeof(float)*count);
   D = (float*)malloc(sizeof(float)*count);
+  F = (float*)malloc(sizeof(float)*count);
   global_item_size = count;
   local_item_size = 64;
 }
@@ -98,26 +101,24 @@ void CVManager::update(float dt, const glm::vec4& gravity)
     clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
     clSetKernelArg(kernel, 2, 4 * sizeof(float), &gravity);
-    ret = clSetKernelArg(kernel, 3, sizeof(cl_mem), &debug1);
+    clSetKernelArg(kernel, 3, sizeof(cl_mem), &debug1);
     clSetKernelArg(kernel, 4, sizeof(cl_mem), &debug2);
-    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
-
-    // Calculate the starting point for this update
-    // size_t global_work_offset = quarterIndex * quarterSize;
-
-    // Update only a quarter of the particles
+    clSetKernelArg(kernel, 5, sizeof(cl_mem), &debug3);
+    // clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, &local_item_size, 0, nullptr, nullptr);
-    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
+    // clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clFinish(command_queue);
 
-    // ret = clEnqueueReadBuffer(command_queue, debug1, CL_TRUE, 0, 
-    //         totalParticles * sizeof(float), C, 0, NULL, NULL);
-    // ret = clEnqueueReadBuffer(command_queue, debug2, CL_TRUE, 0, 
-    //         totalParticles * sizeof(float), D, 0, NULL, NULL);
-    // for (int i =0; i < totalParticles; ++i){
-    //   std::cout << "c : "<<C[i] << "  D : " << D[i] << " dt : " << dt << std::endl;
+    ret = clEnqueueReadBuffer(command_queue, debug1, CL_TRUE, 0, 
+            totalParticles * sizeof(float), C, 0, NULL, NULL);
+    ret = clEnqueueReadBuffer(command_queue, debug2, CL_TRUE, 0, 
+            totalParticles * sizeof(float), D, 0, NULL, NULL);
+    ret = clEnqueueReadBuffer(command_queue, debug3, CL_TRUE, 0, 
+            totalParticles * sizeof(float), F, 0, NULL, NULL);
+    // for (int i =0; i < global_item_size; ++i){
+    //   std::cout << "x : "<<C[i] << "  y : " << D[i] << " z : " << F[i] << std::endl;
     // }
-    // Move to the next quarter for the next update
+
     quarterIndex = (quarterIndex + 1) % 4;
 }
 

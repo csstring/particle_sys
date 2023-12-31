@@ -18,10 +18,10 @@ class Camera
     private:
         float _yaw;
         float _pitch;
-        float _movementSpeed;
         float _mouseSensitivity;
 
     public:
+        float _movementSpeed;
         float _fov;
         bool _isFirst;
         bool _isOn;

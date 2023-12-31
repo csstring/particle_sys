@@ -12,6 +12,7 @@ void Camera::initialize(void)
     _cameraFront = glm::vec3(0,0,-1);
     _worldUp = _cameraUp;
     _zFar = 100;
+    _movementSpeed = 10;
     updateCameraVectors();
 }
 
@@ -56,13 +57,13 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPi
 
 glm::vec4 Camera::getWorldXYPosition() const
 {
-    const float distance = (_zFar + _zNear) / 2.0f;
-    const float midlePlaneY = distance * tan(glm::radians(_fov/2.0f)) * 2;
+    const float distance = 5.0f;
+    const float midlePlaneY = distance * glm::tan(glm::radians(_fov/2.0f)) * 2.0f;
     const float midlePlaneX = midlePlaneY * ASPECT_RATIO;
     const float ratio = WINDOW_HEIGHT / midlePlaneY;
 
-    const float y = 1.0f - (_lastY / ratio - midlePlaneY / 2);
-    const float x = _lastX / ratio - midlePlaneX / 2;
+    const float y = -((_lastY) / ratio - midlePlaneY / 2.0f);
+    const float x = _lastX / ratio - midlePlaneX / 2.0f;
 
-    return glm::vec4(_cameraPos + _cameraFront * distance + _cameraRight * x + _cameraUp * y, 0);
+    return glm::vec4(_cameraPos + _cameraFront * distance + _cameraRight * x + _cameraUp * y, 0.0f);
 }

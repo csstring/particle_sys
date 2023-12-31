@@ -13,13 +13,14 @@ class CVManager
     cl_context context;
     cl_command_queue command_queue;
     cl_mem clVBO;
-    cl_mem debug1, debug2;
+    cl_mem debug1, debug2, debug3;
     cl_program program;
     cl_kernel kernel;
     uint64 global_item_size = 1024;
     uint64 local_item_size = 64;
     float* C;
     float* D;
+    float* F;
   public:
     CVManager(){};
     ~CVManager();

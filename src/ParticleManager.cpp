@@ -36,8 +36,8 @@ void ParticleManager::initialize()
     const float theta = randomTheta(gen);
     const float theta2 = dp(gen);
     p._position = glm::vec4(cos(theta), -sin(theta), 0.0, 1.0);
-    p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
-    // p._velocity = glm::vec4(0.0f);
+    // p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
+    p._velocity = glm::vec4(0.0f);
     p._color = rainbow[dc(gen)];
     // p._radius = (dp(gen) + 1.3f) * 1.02f;
     // p._life = 1.0f;
