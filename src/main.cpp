@@ -135,6 +135,7 @@ int main(int ac, char** av)
         shaderManager.use(shaderInput);
         shaderManager.setMat4("projection", projection);
         shaderManager.setMat4("view", _camera._view);
+        shaderManager.setVec4("cursorPos", _camera.getWorldXYPosition());
         simulator.update(delta, _camera);
         simulator.draw();
         mygui.render();

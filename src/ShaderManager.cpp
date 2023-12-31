@@ -37,6 +37,10 @@ void ShaderManager::setMat4(const std::string &name, glm::mat4 mat4) const
 {
     glUniformMatrix4fv(glGetUniformLocation(_curProgramId, name.c_str()),1, false, &mat4[0].x);
 }
+void ShaderManager::setVec4(const std::string &name, glm::vec4 vec4) const
+{
+    glUniform4fv(glGetUniformLocation(_curProgramId, name.c_str()), 1, &vec4.x);
+}
 
 void ShaderManager::setVec3(const std::string &name, glm::vec3 vec3) const
 {
