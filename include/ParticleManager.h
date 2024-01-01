@@ -1,9 +1,8 @@
 #pragma once
 #include "Common.h"
 #include "PerlinNoise.h"
-
+#include "Particle.h"
 //thread
-struct Particle;
 class Camera;
 class ParticleManager : Noncopyable
 {
@@ -22,6 +21,6 @@ class ParticleManager : Noncopyable
 
     void initialize();
     void update(float dt);
-    void draw();
+    void draw(uint32 drawCount);
     uint32 getParticleCount(){return _particleCount;};
 };

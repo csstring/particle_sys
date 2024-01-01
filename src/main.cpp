@@ -128,14 +128,14 @@ int main(int ac, char** av)
     while (window.isWindowClose() == false)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mygui.update(_camera, shaderInput);
-        window.processInput(delta , _camera);
+        mygui.update(_camera, shaderInput, simulator);
+        window.processInput(delta , _camera, simulator._scean);
         _camera.update();
         // std::cout << "x : " << _camera._lastX << " y : " << _camera._lastY << std::endl;
         shaderManager.use(shaderInput);
         shaderManager.setMat4("projection", projection);
         shaderManager.setMat4("view", _camera._view);
-        shaderManager.setVec4("cursorPos", _camera.getWorldXYPosition());
+        shaderManager.setVec4("cursorPos", projection * _camera._view * _camera.getWorldCursorPos());
         simulator.update(delta, _camera);
         simulator.draw();
         mygui.render();

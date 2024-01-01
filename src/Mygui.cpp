@@ -1,5 +1,6 @@
 #include "Mygui.h"
 #include "Camera.h"
+#include "Simulator.h"
 
 void Mygui::initialize(GLFWwindow* window)
 {
@@ -13,7 +14,7 @@ void Mygui::initialize(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init();
 }
 
-void Mygui::update(Camera cam, SHADERINPUT& shape)
+void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
 {
 
   ImGui_ImplOpenGL3_NewFrame();
@@ -31,7 +32,10 @@ void Mygui::update(Camera cam, SHADERINPUT& shape)
       shape = SHADERINPUT::CIRCLE;
   if (ImGui::Button("Qurd Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
       shape = SHADERINPUT::QURD;
+  
+  ImGui::SliderInt("Particle Count", &simul._drawCount, 0, simul._totalCount);
   ImGui::End();
+  
 }
 
 void Mygui::render(void)

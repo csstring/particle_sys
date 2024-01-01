@@ -35,6 +35,8 @@ void ParticleManager::initialize()
   for (auto& p : _particles){
     const float theta = randomTheta(gen);
     const float theta2 = dp(gen);
+    const float theta3 = dp(gen);
+    // p._position = glm::vec4(theta3,theta2, 0.0, 1.0);
     p._position = glm::vec4(cos(theta), -sin(theta), 0.0, 1.0);
     p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
     // p._velocity = glm::vec4(0.0f);
@@ -75,9 +77,9 @@ void ParticleManager::initialize()
 void ParticleManager::update(float dt)
 {}
 
-void ParticleManager::draw()
+void ParticleManager::draw(uint32 drawCount)
 {
   glBindVertexArray(_VAO);
-  glDrawArrays(GL_POINTS, 0, _particleCount);
+  glDrawArrays(GL_POINTS, 0, drawCount);
   glBindVertexArray(0);
 }

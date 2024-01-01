@@ -4,6 +4,7 @@
 #include "Simulator.h"
 #include "Camera.h"
 #include "EnumHeader.h"
+#include "Scean.h"
 
 void Window::initialize(void)
 {
@@ -37,11 +38,14 @@ void Window::initialize(void)
     glDepthFunc(GL_LESS);
 }
 
-void Window::processInput(float delta, Camera& camera)
+void Window::processInput(float delta, Camera& camera, Scean* scean)
 {
     static int currentMouseState,previousMouseState;
+    static int currentGravityState,previousGravityState;
 
     currentMouseState = glfwGetKey(_window, GLFW_KEY_SPACE);
+    currentGravityState = glfwGetKey(_window, GLFW_KEY_LEFT_SHIFT);
+
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
 
@@ -67,6 +71,13 @@ void Window::processInput(float delta, Camera& camera)
         camera._isOn = camera._isOn == true ? false : true;
     } else if (currentMouseState == GLFW_PRESS && previousMouseState == GLFW_RELEASE){
         previousMouseState = currentMouseState;
+    }
+
+    if (currentGravityState == GLFW_RELEASE && previousGravityState == GLFW_PRESS) {
+        previousGravityState = currentGravityState;
+        scean->_isGravityOn = scean->_isGravityOn == true ? false : true;
+    } else if (currentGravityState == GLFW_PRESS && previousGravityState == GLFW_RELEASE){
+        previousGravityState = currentGravityState;
     }
 }
 

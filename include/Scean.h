@@ -11,7 +11,10 @@ class Scean : Noncopyable
   private:
     ParticleManager _particleManager;
     CVManager _CVManager;
-    
+
+  public:
+    bool _isGravityOn = false;
+      
   public:
     Scean() = delete;
     Scean(uint32 particleCount)
@@ -21,6 +24,6 @@ class Scean : Noncopyable
 
     void initialize();
 
-    void update(const Camera& camera, float dt);
-    void draw();
+    void update(const Camera& camera, float dt, int32 drawCount);
+    void draw(uint32 drawCount);
 };

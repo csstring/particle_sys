@@ -14,7 +14,7 @@ class Camera
         void ProcessMouseScroll(float yoffset);
         void updateCameraVectors(void);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch);
-        glm::vec4 getWorldXYPosition() const;
+        glm::vec4 getWorldCursorPos() const;
     private:
         float _yaw;
         float _pitch;

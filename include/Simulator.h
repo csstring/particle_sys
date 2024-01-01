@@ -11,9 +11,11 @@ class Simulator : Noncopyable
         uint32 _textureID;
         uint32 _vertexSize;
         
-    private:
+    public:
         Scean* _scean = nullptr;
-
+        int32 _drawCount;
+        int32 _totalCount;
+        
     public:
         glm::mat4 _worldTranslate;
 
