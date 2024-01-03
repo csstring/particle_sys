@@ -4,6 +4,7 @@
 #include "Simulator.h"
 #include "Camera.h"
 #include "EnumHeader.h"
+#include "Scean.h"
 
 void Window::initialize(void)
 {
@@ -31,45 +32,67 @@ void Window::initialize(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_CULL_FACE);
-    glPointSize(5);
+    glPointSize(4);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CCW); 
+    glFrontFace(GL_CW); 
     glDepthFunc(GL_LESS);
-    glfwSwapInterval(1);
 }
 
-void Window::processInput(float delta, Camera& camera)
+void Window::processInput(float delta, Camera& camera, Simulator& simul)
 {
-    delta *= 0.05;
+    static int currentMouseState,previousMouseState;
+    static int currentGravityState,previousGravityState;
+    static int currentSpeed,previousSpeed;
+    static int SpeedCash = 0;
+    currentMouseState = glfwGetKey(_window, GLFW_KEY_SPACE);
+    currentGravityState = glfwGetKey(_window, GLFW_KEY_LEFT_SHIFT);
+    currentSpeed = glfwGetKey(_window, GLFW_KEY_P);
+
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
 
     if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        camera._cameraPos += delta * camera._cameraFront;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
+        camera._cameraPos += delta* camera._movementSpeed * camera._cameraFront;
     }
     else if (glfwGetKey(_window, GLFW_KEY_S ) == GLFW_PRESS)
     {
-        camera._cameraPos -= delta * camera._cameraFront;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
+        camera._cameraPos -= delta* camera._movementSpeed * camera._cameraFront;
     }
     else if (glfwGetKey(_window, GLFW_KEY_A ) == GLFW_PRESS)
     {
-        camera._cameraPos -= camera._cameraRight * delta;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
+        camera._cameraPos -= camera._cameraRight * delta* camera._movementSpeed;
     }
     else if (glfwGetKey(_window, GLFW_KEY_D ) == GLFW_PRESS)
     {
-        camera._cameraPos += camera._cameraRight * delta;
-        // std::cout << glm::to_string(camera._cameraPos) << std::endl;
+        camera._cameraPos += camera._cameraRight * delta* camera._movementSpeed;
     }
-    
+
+    if (currentMouseState == GLFW_RELEASE && previousMouseState == GLFW_PRESS) {
+        previousMouseState = currentMouseState;
+        camera._isOn = camera._isOn == true ? false : true;
+    } else if (currentMouseState == GLFW_PRESS && previousMouseState == GLFW_RELEASE){
+        previousMouseState = currentMouseState;
+    }
+
+    if (currentSpeed == GLFW_RELEASE && previousSpeed == GLFW_PRESS) {
+        previousSpeed = currentSpeed;
+        std::swap(SpeedCash, simul._speed);
+    } else if (currentSpeed == GLFW_PRESS && previousSpeed == GLFW_RELEASE){
+        previousSpeed = currentSpeed;
+    }
+
+    if (currentGravityState == GLFW_RELEASE && previousGravityState == GLFW_PRESS) {
+        previousGravityState = currentGravityState;
+        simul._scean->_isGravityOn = simul._scean->_isGravityOn == true ? false : true;
+    } else if (currentGravityState == GLFW_PRESS && previousGravityState == GLFW_RELEASE){
+        previousGravityState = currentGravityState;
+    }
 }
 
 void Window::clearColorSetUp(float r, float g, float b, float a)
 {
-    glClearColor(a,g,b,a);
+    glClearColor(r,g,b,a);
 }
 
 bool Window::isWindowClose(void)

@@ -21,16 +21,16 @@ void Simulator::initialize(uint32 particlecount)
 {
   this->_scean = new Scean(particlecount);
   this->_scean->initialize();
+  _totalCount = particlecount;
+  _drawCount = _totalCount;
 }
 
 void Simulator::draw(void)
 {
-  uint32 totalData = 0;
-  uint32 curData = 0;
-  _scean->draw();
+  _scean->draw(_drawCount);
 }
 
-void Simulator::update(float delta, const Shader& shader,const Camera& camera)
+void Simulator::update(float delta, const Camera& camera)
 {
-  _scean->update(camera, delta);
+  _scean->update(camera, delta, _drawCount);
 }

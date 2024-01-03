@@ -3,26 +3,24 @@
 #include "EnumHeader.h"
 
 class Parser;
-class Shader;
 class Scean;
 class Camera;
 class Simulator : Noncopyable
 {
-    private:
-        uint32 _textureID;
-        uint32 _vertexSize;
-        
-    private:
+    public:
         Scean* _scean = nullptr;
+        int32 _speed;
+        int32 _pointSize;
+        int32 _drawCount;
+        int32 _totalCount;
 
     public:
-        glm::mat4 _worldTranslate;
 
-        Simulator(){};
+        Simulator() : _speed(0), _pointSize(4){};
         ~Simulator();
         
         void initialize(uint32 particlecount);
-        void update(float delta, const Shader& shader,const Camera& camera);
+        void update(float delta, const Camera& camera);
         void draw(void);
 };
 

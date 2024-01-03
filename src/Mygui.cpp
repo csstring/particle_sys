@@ -1,5 +1,7 @@
 #include "Mygui.h"
 #include "Camera.h"
+#include "Simulator.h"
+#include "Scean.h"
 
 void Mygui::initialize(GLFWwindow* window)
 {
@@ -13,23 +15,36 @@ void Mygui::initialize(GLFWwindow* window)
   ImGui_ImplOpenGL3_Init();
 }
 
-void Mygui::update(Camera cam)
+void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
 {
+
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-  ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+  ImGui::Begin("Mandatory");                          // Create a window called "Hello, world!" and append into it.
 
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   ImGui::Text("carmera pos x : %f y : %f z : %f", cam._cameraPos.x, cam._cameraPos.y, cam._cameraPos.z);
+
+  if (ImGui::Button("Circle Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+      shape = SHADERINPUT::CIRCLE;
+  if (ImGui::Button("Qurd Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+      shape = SHADERINPUT::QURD;
+  
+  ImGui::SliderInt("Particle Count", &simul._drawCount, 0, simul._totalCount);
+  ImGui::End();
+
+  ImGui::Begin("Bonus"); // Start the Bonus window
+
+  ImGui::SliderInt("Particle Size", &simul._pointSize, 1, 10);
+  ImGui::SliderInt("Simul Speed", &simul._speed, 0, 5);
+  ImGui::Checkbox("Enable Generator", &simul._scean->_isGeneratorOn);
+  ImGui::End();
 }
 
 void Mygui::render(void)
 {
-  ImGui::End();
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

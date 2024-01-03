@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
  
-#ifdef __APPLE__
 #include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif
+
  
 #define MAX_SOURCE_SIZE (0x100000)
- 
+
 int main(void) {
     // Create the two input vectors
     int i;
@@ -42,7 +39,6 @@ int main(void) {
     cl_int ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
     ret = clGetDeviceIDs( platform_id, CL_DEVICE_TYPE_DEFAULT, 1, 
             &device_id, &ret_num_devices);
- 
     // Create an OpenCL context
     cl_context context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
  
@@ -55,7 +51,7 @@ int main(void) {
     cl_mem b_mem_obj = clCreateBuffer(context, CL_MEM_READ_ONLY,
             LIST_SIZE * sizeof(int), NULL, &ret);
     cl_mem c_mem_obj = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
-            LIST_SIZE * sizeof(int), NULL, &ret);
+            LIST_SIZE * sizeof(float), NULL, &ret);
  
     // Copy the lists A and B to their respective memory buffers
     ret = clEnqueueWriteBuffer(command_queue, a_mem_obj, CL_TRUE, 0,
@@ -85,13 +81,13 @@ int main(void) {
             &global_item_size, &local_item_size, 0, NULL, NULL);
  
     // Read the memory buffer C on the device to the local variable C
-    int *C = (int*)malloc(sizeof(int)*LIST_SIZE);
+    float *C = (float*)malloc(sizeof(float)*LIST_SIZE);
     ret = clEnqueueReadBuffer(command_queue, c_mem_obj, CL_TRUE, 0, 
-            LIST_SIZE * sizeof(int), C, 0, NULL, NULL);
+            LIST_SIZE * sizeof(float), C, 0, NULL, NULL);
  
     // Display the result to the screen
     for(i = 0; i < LIST_SIZE; i++)
-        printf("%d + %d = %d\n", A[i], B[i], C[i]);
+        printf("%d + %d = %f\n", A[i], B[i], C[i]);
  
     // Clean up
     ret = clFlush(command_queue);
