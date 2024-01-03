@@ -4,6 +4,7 @@ struct alignas(16) Particle
 {
   glm::vec4 _position;
   glm::vec4 _velocity;
+  glm::vec3 _color;
   float _life;
   // float p4 = 0.0f;
   // float _radius = 1.0f;
