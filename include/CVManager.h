@@ -14,13 +14,8 @@ class CVManager
     cl_int ret;
     cl_command_queue command_queue;
     cl_mem clVBO;
-    cl_mem debug1, debug2, debug3;
     uint64 global_item_size = 1024;
-    uint64 local_item_size = 64;
     std::vector<KernelProgram> _programs;
-    float* C;
-    float* D;
-    float* F;
 
   public:
     std::random_device _rd;
@@ -30,6 +25,6 @@ class CVManager
     void initialize(uint32 VBO, uint64 count);
     void initCircle();
     void initPlane();
-    void initBlackHole();
+    void particleGenerate(float dt, const glm::vec4& gravity);
     void update(float dt, const glm::vec4& gravity, int32 drawCount);
 };

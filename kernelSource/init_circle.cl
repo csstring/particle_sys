@@ -15,7 +15,7 @@ float rand_lcg(uint *seed) {
     return ((float)(*seed) / (float)UINT_MAX);
 }
 
-__kernel void init_circle(__global Particle* particles, uint seed, __global float* C, __global float* D, __global float* F) {
+__kernel void init_circle(__global Particle* particles, uint seed) {
     int i = get_global_id(0);
     seed += i;
     float theta = rand_lcg(&seed) * 2.0f * 3.141592f - 3.141592f;
@@ -25,9 +25,6 @@ __kernel void init_circle(__global Particle* particles, uint seed, __global floa
 
     // Set particle position on the edge of a circle
     particles[i]._position = (float4)(cos(theta), -sin(theta), 0.0f, 1.0f);
-    C[i] = particles[i]._position.x;
-    D[i] = particles[i]._position.y;
-    F[i] = particles[i]._position.z;
     particles[i]._velocity = (float4)(speedX, speedY, speedZ, 0.0f);
     particles[i]._life = 1.0f;
 }

@@ -1,17 +1,16 @@
 #pragma once
 #include "Common.h"
 
-const float cameraSpeed = 0.5f;
+constexpr float cameraSpeed = 0.5f;
 class Camera
 {
 
     public:
-        Camera() : _yaw(-90.0f), _pitch(0.0f), _movementSpeed(2.5f), _mouseSensitivity(0.1f), _fov(80.0f), _isFirst(true), _isOn(false)
+        Camera() : _yaw(-90.0f), _pitch(0.0f), _mouseSensitivity(0.1f), _movementSpeed(2.5f), _fov(80.0f), _isFirst(true), _isOn(false)
         {};
         ~Camera(){};
         void update(void);
         void initialize(void);
-        void ProcessMouseScroll(float yoffset);
         void updateCameraVectors(void);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch);
         glm::vec4 getWorldCursorPos() const;

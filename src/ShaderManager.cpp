@@ -8,11 +8,9 @@ void ShaderManager::initialize()
   qurdShader = std::make_unique<Shader>();
 
   circleShader->initialize("./shaderSource/CircleVertexShader.glsl",
-    "./shaderSource/CircleFragmentShader.glsl",
-    "./shaderSource/CircleGeometryShader.glsl");
+    "./shaderSource/CircleFragmentShader.glsl");
   qurdShader->initialize("./shaderSource/QurdVertexShader.glsl",
-    "./shaderSource/QurdFragmentShader.glsl",
-    "./shaderSource/QurdGeometryShader.glsl");
+    "./shaderSource/QurdFragmentShader.glsl");
     
   _curProgramId = circleShader->_programId;
 }

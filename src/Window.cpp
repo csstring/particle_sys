@@ -30,21 +30,23 @@ void Window::initialize(void)
 
     clearColorSetUp();
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_CULL_FACE);
-    // glPointSize(2);
+    glPointSize(4);
     glCullFace(GL_BACK);
     glFrontFace(GL_CW); 
     glDepthFunc(GL_LESS);
 }
 
-void Window::processInput(float delta, Camera& camera, Scean* scean)
+void Window::processInput(float delta, Camera& camera, Simulator& simul)
 {
     static int currentMouseState,previousMouseState;
     static int currentGravityState,previousGravityState;
-
+    static int currentSpeed,previousSpeed;
+    static int SpeedCash = 0;
     currentMouseState = glfwGetKey(_window, GLFW_KEY_SPACE);
     currentGravityState = glfwGetKey(_window, GLFW_KEY_LEFT_SHIFT);
+    currentSpeed = glfwGetKey(_window, GLFW_KEY_P);
 
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(_window, true);
@@ -73,9 +75,16 @@ void Window::processInput(float delta, Camera& camera, Scean* scean)
         previousMouseState = currentMouseState;
     }
 
+    if (currentSpeed == GLFW_RELEASE && previousSpeed == GLFW_PRESS) {
+        previousSpeed = currentSpeed;
+        std::swap(SpeedCash, simul._speed);
+    } else if (currentSpeed == GLFW_PRESS && previousSpeed == GLFW_RELEASE){
+        previousSpeed = currentSpeed;
+    }
+
     if (currentGravityState == GLFW_RELEASE && previousGravityState == GLFW_PRESS) {
         previousGravityState = currentGravityState;
-        scean->_isGravityOn = scean->_isGravityOn == true ? false : true;
+        simul._scean->_isGravityOn = simul._scean->_isGravityOn == true ? false : true;
     } else if (currentGravityState == GLFW_PRESS && previousGravityState == GLFW_RELEASE){
         previousGravityState = currentGravityState;
     }
@@ -83,7 +92,7 @@ void Window::processInput(float delta, Camera& camera, Scean* scean)
 
 void Window::clearColorSetUp(float r, float g, float b, float a)
 {
-    glClearColor(a,g,b,a);
+    glClearColor(r,g,b,a);
 }
 
 bool Window::isWindowClose(void)

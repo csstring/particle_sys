@@ -14,6 +14,7 @@ class Scean : Noncopyable
 
   public:
     bool _isGravityOn = false;
+    bool _isGeneratorOn = false;
       
   public:
     Scean() = delete;

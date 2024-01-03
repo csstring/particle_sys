@@ -48,12 +48,6 @@ void CVManager::initialize(uint32 VBO, uint64 count)
     std::cout << ret << std::endl;
     ft_assert("clCreateFromGLBuffer");
   }
-  debug1 = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
-            count * sizeof(float), NULL, &ret);
-  debug2 = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
-            count * sizeof(float), NULL, &ret);
-  debug3 = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 
-            count * sizeof(float), NULL, &ret);
 
   _programs.resize(4);
   _programs[MAIN_ROOP].initialize(context, device_id, "./kernelSource/particle_sys.cl", "particle_sys");
@@ -61,11 +55,7 @@ void CVManager::initialize(uint32 VBO, uint64 count)
   _programs[INIT_PLANE].initialize(context, device_id, "./kernelSource/init_plane.cl", "init_plane");
   _programs[GENERATOR].initialize(context, device_id, "./kernelSource/particle_generator.cl", "particle_generator");
 
-  C = (float*)malloc(sizeof(float)*count);
-  D = (float*)malloc(sizeof(float)*count);
-  F = (float*)malloc(sizeof(float)*count);
   global_item_size = count;
-  local_item_size = 64;
 }
 
 void CVManager::initCircle()
@@ -75,9 +65,6 @@ void CVManager::initCircle()
 
   clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
   clSetKernelArg(kernel, 1, sizeof(uint32), &seed);
-  clSetKernelArg(kernel, 2, sizeof(cl_mem), &debug1);
-  clSetKernelArg(kernel, 3, sizeof(cl_mem), &debug2);
-  clSetKernelArg(kernel, 4, sizeof(cl_mem), &debug3);
   clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, nullptr, 0, nullptr, nullptr);
   clFinish(command_queue);
 }
@@ -92,47 +79,32 @@ void CVManager::initPlane()
   clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, nullptr, 0, nullptr, nullptr);
   clFinish(command_queue);
 }
-void CVManager::initBlackHole()
-{}
+
+void CVManager::particleGenerate(float dt, const glm::vec4& gravity)
+{
+  dt *= 0.4;
+  const size_t geCount = 5000;
+  cl_kernel generator = _programs[GENERATOR]._kernel;
+  uint32 seed = _rd();
+  clSetKernelArg(generator, 0, sizeof(cl_mem), &clVBO);
+  clSetKernelArg(generator, 1, sizeof(uint32), &seed);
+  clSetKernelArg(generator, 2, 4 * sizeof(float), &gravity);
+  clSetKernelArg(generator, 3, sizeof(float), &dt);
+  clEnqueueNDRangeKernel(command_queue, generator, 1, nullptr, &geCount, nullptr, 0, nullptr, nullptr);
+  clFinish(command_queue);
+}
 
 void CVManager::update(float dt, const glm::vec4& gravity, int32 drawCount)
 {
-    static size_t quarterIndex = 0;
     const size_t totalParticles = drawCount;  // Total number of particles
-    const size_t quarterSize = totalParticles / 4;  // Size of each quarter
-    const size_t geCount = 5000;
     dt *= 0.4;
     cl_kernel kernel = _programs[MAIN_ROOP]._kernel;
-    cl_kernel generator = _programs[GENERATOR]._kernel;
-    uint32 seed = _rd();
-    clSetKernelArg(generator, 0, sizeof(cl_mem), &clVBO);
-    clSetKernelArg(generator, 1, sizeof(uint32), &seed);
-    clSetKernelArg(generator, 2, 4 * sizeof(float), &gravity);
-    clSetKernelArg(generator, 3, sizeof(float), &dt);
-    clEnqueueNDRangeKernel(command_queue, generator, 1, nullptr, &geCount, nullptr, 0, nullptr, nullptr);
-    clFinish(command_queue);
 
     clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
     clSetKernelArg(kernel, 2, 4 * sizeof(float), &gravity);
-    clSetKernelArg(kernel, 3, sizeof(cl_mem), &debug1);
-    clSetKernelArg(kernel, 4, sizeof(cl_mem), &debug2);
-    clSetKernelArg(kernel, 5, sizeof(cl_mem), &debug3);
-    // clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &totalParticles, nullptr, 0, nullptr, nullptr);
-    // clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clFinish(command_queue);
-    // ret = clEnqueueReadBuffer(command_queue, debug1, CL_TRUE, 0, 
-    //         geCount * sizeof(float), C, 0, NULL, NULL);
-    // ret = clEnqueueReadBuffer(command_queue, debug2, CL_TRUE, 0, 
-    //         geCount * sizeof(float), D, 0, NULL, NULL);
-    // ret = clEnqueueReadBuffer(command_queue, debug3, CL_TRUE, 0, 
-    //         geCount * sizeof(float), F, 0, NULL, NULL);
-    // clFinish(command_queue);
-    // for (int i =0; i < geCount; ++i){
-    //   std::cout << "life : "<<C[i] << "  x : " << D[i] << " y : " << F[i] << std::endl;
-    // }
-    // std::cout << glm::to_string(gravity) << std::endl;
 }
 
 CVManager::~CVManager()

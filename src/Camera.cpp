@@ -16,15 +16,6 @@ void Camera::initialize(void)
     updateCameraVectors();
 }
 
-void Camera::ProcessMouseScroll(float yoffset)
-{
-    _fov -= (float)yoffset;
-    if (_fov < 1.0f)
-        _fov = 1.0f;
-    if (_fov > 80.0f)
-        _fov = 80.0f;
-}
-
 void Camera::updateCameraVectors()
 {
     glm::vec3 front;

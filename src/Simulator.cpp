@@ -27,8 +27,6 @@ void Simulator::initialize(uint32 particlecount)
 
 void Simulator::draw(void)
 {
-  uint32 totalData = 0;
-  uint32 curData = 0;
   _scean->draw(_drawCount);
 }
 

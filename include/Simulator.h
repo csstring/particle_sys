@@ -7,19 +7,16 @@ class Scean;
 class Camera;
 class Simulator : Noncopyable
 {
-    private:
-        uint32 _textureID;
-        uint32 _vertexSize;
-        
     public:
         Scean* _scean = nullptr;
+        int32 _speed;
+        int32 _pointSize;
         int32 _drawCount;
         int32 _totalCount;
-        
-    public:
-        glm::mat4 _worldTranslate;
 
-        Simulator(){};
+    public:
+
+        Simulator() : _speed(0), _pointSize(4){};
         ~Simulator();
         
         void initialize(uint32 particlecount);

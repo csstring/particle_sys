@@ -1,8 +1,12 @@
 #version 410 core
 
-in vec4 fragColor;  // Color from geometry shader
-out vec4 color;  // Output color of the fragment
+in vec4 fragColor;
+out vec4 color;
 
 void main() {
-    color = fragColor;  // Use the received color, with full opacity
+    float dist = length(gl_PointCoord - vec2(0.5, 0.5));
+    if (dist > 0.5) {
+        discard;
+    }
+    color = fragColor;
 }

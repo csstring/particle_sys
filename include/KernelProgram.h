@@ -7,6 +7,7 @@ enum KernelFunc {
   INIT_PLANE,
   GENERATOR
 };
+
 class KernelProgram
 {
   private:

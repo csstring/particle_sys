@@ -1,11 +1,10 @@
 #pragma once
 #include "Common.h"
 
-
 class Shader
 {   
     public :
-        void        initialize(const char* vertexRelativePath,const char* fragmentRelativePath, const char* geometryRelativePath);
+        void        initialize(const char* vertexRelativePath,const char* fragmentRelativePath);
         void        use(void);
 
     public :
@@ -14,5 +13,4 @@ class Shader
     private:
         std::string _vertexFullPath;
         std::string _fragmentFullPath;
-        std::string _geometryFullPath;
 };

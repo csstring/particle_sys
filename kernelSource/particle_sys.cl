@@ -5,7 +5,7 @@ typedef struct {
     float _life;   
 } Particle;
 
-__kernel void particle_sys(__global Particle* particles, float dt, float4 gravity, __global float* C, __global float* D, __global float* F) {
+__kernel void particle_sys(__global Particle* particles, float dt, float4 gravity) {
 
   int i = get_global_id(0);
   int flag = gravity.w;

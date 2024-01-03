@@ -8,47 +8,15 @@
 ParticleManager::~ParticleManager()
 {
   glDeleteVertexArrays(1, &_VAO);
-  glDeleteBuffers(1, &posID);
+  glDeleteBuffers(1, &_VBO);
 }
-// uint32 _VAO, velID, posID, colorID ,lifeID,radID ;
+// uint32 _VAO, velID, _VBO, colorID ,lifeID,radID ;
 void ParticleManager::initialize()
 {
-  _particles.resize(_particleCount);
-  const std::vector<glm::vec4> rainbow = {
-        {1.0f, 0.0f, 0.0f, 1.0f},  // Red
-        {1.0f, 0.65f, 0.0f, 1.0f}, // Orange
-        {1.0f, 1.0f, 0.0f, 1.0f},  // Yellow
-        {0.0f, 1.0f, 0.0f, 1.0f},  // Green
-        {0.0f, 0.0f, 1.0f, 1.0f},  // Blue
-        {0.3f, 0.0f, 0.5f, 1.0f},  // Indigo
-        {0.5f, 0.0f, 1.0f, 1.0f}   // Violet/Purple
-  };
-
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> dp(-1.0f, 1.0f);
-  std::uniform_int_distribution<size_t> dc(0, rainbow.size() - 1);
-  std::uniform_real_distribution<float> randomTheta(-3.141592f, 3.141592f);
-  std::uniform_real_distribution<float> randomSpeed(-2.0f, 2.0f);
-  std::uniform_real_distribution<float> randomLife(0.0f, 1.0f);
-
-  for (auto& p : _particles){
-    const float theta = randomTheta(gen);
-    const float theta2 = dp(gen);
-    const float theta3 = dp(gen);
-    // p._position = glm::vec4(theta3,theta2, 0.0, 1.0);
-    p._position = glm::vec4(cos(theta), -sin(theta), 0.0, 1.0);
-    p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
-    // p._velocity = glm::vec4(0.0f);
-    // p._color = rainbow[dc(gen)];
-    // p._radius = (dp(gen) + 1.3f) * 1.02f;
-    // p._life = 1.0f;
-  }
-
   glGenVertexArrays(1, &_VAO);
   glBindVertexArray(_VAO);
-  glGenBuffers(1, &posID);
-  glBindBuffer(GL_ARRAY_BUFFER, posID);
+  glGenBuffers(1, &_VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, _VBO);
   glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), nullptr, GL_STATIC_DRAW);
 
   // Position
@@ -65,9 +33,6 @@ void ParticleManager::initialize()
 
   glBindVertexArray(0);
 }
-
-void ParticleManager::update(float dt)
-{}
 
 void ParticleManager::draw(uint32 drawCount)
 {

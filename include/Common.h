@@ -44,7 +44,6 @@ class Noncopyable
 void ft_assert(const std::string& exec);
 
 //utility
-std::vector<std::string> ft_split(const std::string& str);
 inline std::chrono::steady_clock::time_point getCurTimePoint(void)
 {
     return std::chrono::steady_clock::now();
