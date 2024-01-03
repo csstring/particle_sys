@@ -49,11 +49,11 @@ void CVManager::initialize(uint32 VBO, uint64 count)
     ft_assert("clCreateFromGLBuffer");
   }
 
-  _programs.resize(4);
-  _programs[MAIN_ROOP].initialize(context, device_id, "./kernelSource/particle_sys.cl", "particle_sys");
-  _programs[INIT_CIRCLE].initialize(context, device_id, "./kernelSource/init_circle.cl", "init_circle");
-  _programs[INIT_PLANE].initialize(context, device_id, "./kernelSource/init_plane.cl", "init_plane");
-  _programs[GENERATOR].initialize(context, device_id, "./kernelSource/particle_generator.cl", "particle_generator");
+  // _programs.resize(4);
+  // _programs[MAIN_ROOP].initialize(context, device_id, "./kernelSource/particle_sys.cl", "particle_sys");
+  // _programs[INIT_CIRCLE].initialize(context, device_id, "./kernelSource/init_circle.cl", "init_circle");
+  // _programs[INIT_PLANE].initialize(context, device_id, "./kernelSource/init_plane.cl", "init_plane");
+  // _programs[GENERATOR].initialize(context, device_id, "./kernelSource/particle_generator.cl", "particle_generator");
 
   global_item_size = count;
 }

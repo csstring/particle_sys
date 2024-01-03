@@ -1,21 +1,21 @@
 #pragma once
 #include "Common.h"
 #include "EnumHeader.h"
+#include "Scean.h"
+#include <memory>
 
 class Parser;
-class Scean;
 class Camera;
 class Simulator : Noncopyable
 {
     public:
-        Scean* _scean = nullptr;
+        std::unique_ptr<Scean> _scean;
         int32 _speed;
         int32 _pointSize;
         int32 _drawCount;
         int32 _totalCount;
 
     public:
-
         Simulator() : _speed(0), _pointSize(4){};
         ~Simulator();
         
