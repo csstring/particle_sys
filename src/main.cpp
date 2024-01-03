@@ -131,7 +131,6 @@ int main(int ac, char** av)
         mygui.update(_camera, shaderInput, simulator);
         window.processInput(delta , _camera, simulator._scean);
         _camera.update();
-        // std::cout << "x : " << _camera._lastX << " y : " << _camera._lastY << std::endl;
         shaderManager.use(shaderInput);
         shaderManager.setMat4("projection", projection);
         shaderManager.setMat4("view", _camera._view);

@@ -23,8 +23,8 @@ typedef unsigned short      uint16;
 typedef unsigned int        uint32;
 typedef unsigned long       uint64;
 
-constexpr float WINDOW_WITH = 1440;
-constexpr float WINDOW_HEIGHT = 960;
+constexpr float WINDOW_WITH = 1920;
+constexpr float WINDOW_HEIGHT = 1080;
 constexpr float ASPECT_RATIO = WINDOW_WITH / WINDOW_HEIGHT;
 
 class Noncopyable

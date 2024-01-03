@@ -40,7 +40,7 @@ void ParticleManager::initialize()
     p._position = glm::vec4(cos(theta), -sin(theta), 0.0, 1.0);
     p._velocity = glm::vec4(randomSpeed(gen), randomSpeed(gen), randomSpeed(gen),0);
     // p._velocity = glm::vec4(0.0f);
-    p._color = rainbow[dc(gen)];
+    // p._color = rainbow[dc(gen)];
     // p._radius = (dp(gen) + 1.3f) * 1.02f;
     // p._life = 1.0f;
   }
@@ -49,7 +49,7 @@ void ParticleManager::initialize()
   glBindVertexArray(_VAO);
   glGenBuffers(1, &posID);
   glBindBuffer(GL_ARRAY_BUFFER, posID);
-  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), _particles.data(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), nullptr, GL_STATIC_DRAW);
 
   // Position
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
@@ -60,16 +60,8 @@ void ParticleManager::initialize()
   glEnableVertexAttribArray(1);
 
   // Color
-  glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _color));
+  glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
   glEnableVertexAttribArray(2);
-
-  // // Life
-  // glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
-  // glEnableVertexAttribArray(3);
-
-  // // Radius
-  // glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _radius));
-  // glEnableVertexAttribArray(4);
 
   glBindVertexArray(0);
 }

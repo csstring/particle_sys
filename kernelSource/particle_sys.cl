@@ -2,7 +2,7 @@
 typedef struct {
     float4 _position;
     float4 _velocity;
-    float4 _color;   
+    float _life;   
 } Particle;
 
 __kernel void particle_sys(__global Particle* particles, float dt, float4 gravity, __global float* C, __global float* D, __global float* F) {

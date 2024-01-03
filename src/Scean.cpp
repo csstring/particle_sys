@@ -8,6 +8,8 @@ void Scean::initialize()
 {
   _particleManager.initialize();
   _CVManager.initialize(_particleManager.posID, _particleManager.getParticleCount());
+  // _CVManager.initCircle();
+  _CVManager.initPlane();
 }
 
 void Scean::update(const Camera& camera, float dt, int32 drawCount)

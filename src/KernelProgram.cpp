@@ -2,14 +2,9 @@
 #include <fstream>
 #include <sstream>
 
-KernelProgram::KernelProgram()
+void KernelProgram::initialize(cl_context context, cl_device_id deviceID, std::string codePath, std::string name)
 {
-
-}
-
-void KernelProgram::initialize(cl_context context, cl_device_id deviceID, std::string codePath)
-{
-  std::ifstream sourceCodeStream("./kernelSource/particle_sys.cl", std::ios::in);
+  std::ifstream sourceCodeStream(codePath, std::ios::in);
   std::string kernerCode;
   int32 ret;
 
@@ -37,7 +32,7 @@ void KernelProgram::initialize(cl_context context, cl_device_id deviceID, std::s
     std::cout << ret << std::endl;
     ft_assert("clBuildProgram");
   }
-  _kernel = clCreateKernel(_program, "particle_sys", &ret);
+  _kernel = clCreateKernel(_program, name.c_str(), &ret);
   if (ret != 0){
     std::cout << ret << std::endl;
     ft_assert("clCreateKernel");

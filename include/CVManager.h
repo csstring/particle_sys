@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "KernelProgram.h"
 #include <unordered_map>
+#include <random>
 class CVManager
 {
   private:
@@ -22,10 +23,13 @@ class CVManager
     float* F;
 
   public:
-
+    std::random_device _rd;
     cl_context context;
     CVManager(){};
     ~CVManager();
     void initialize(uint32 VBO, uint64 count);
+    void initCircle();
+    void initPlane();
+    void initBlackHole();
     void update(float dt, const glm::vec4& gravity, int32 drawCount);
 };

@@ -6,9 +6,7 @@ layout(points, max_vertices = 1) out;
 uniform vec4 cursorPos;
 
 in VS_OUT {
-    vec4 color;
-//    float life;
-//    float radius;
+    float life;
 } gs_in[];
 
 out vec4 fragColor;  // Pass color to fragment shader
@@ -22,10 +20,8 @@ vec3 hsvToRgb(float h, float s, float v) {
 
 void main() {
 
-//   if (gs_in[0].life < 0.0f)
-//        return;
-
-    // fragColor = gs_in[0].color;
+    if (gs_in[0].life < 0.0f)
+       return;
 
     float distance = distance(gl_in[0].gl_Position.xy, cursorPos.xy);
     float normalizedDistance = clamp(distance / sqrt(12.0), 0.0, 1.0); // Normalize distance
