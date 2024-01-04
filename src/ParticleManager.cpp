@@ -10,7 +10,7 @@ ParticleManager::~ParticleManager()
   glDeleteVertexArrays(1, &_VAO);
   glDeleteBuffers(1, &_VBO);
 }
-// uint32 _VAO, velID, _VBO, colorID ,lifeID,radID ;
+
 void ParticleManager::initialize()
 {
   glGenVertexArrays(1, &_VAO);
@@ -18,7 +18,6 @@ void ParticleManager::initialize()
   glGenBuffers(1, &_VBO);
   glBindBuffer(GL_ARRAY_BUFFER, _VBO);
   glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), nullptr, GL_STATIC_DRAW);
-
   // Position
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
   glEnableVertexAttribArray(0);

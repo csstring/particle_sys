@@ -65,7 +65,9 @@ void CVManager::initCircle()
 
   clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
   clSetKernelArg(kernel, 1, sizeof(uint32), &seed);
+  clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, nullptr, 0, nullptr, nullptr);
+  clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clFinish(command_queue);
 }
 
@@ -76,7 +78,9 @@ void CVManager::initPlane()
 
   clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
   clSetKernelArg(kernel, 1, sizeof(uint32), &seed);
+  clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &global_item_size, nullptr, 0, nullptr, nullptr);
+  clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clFinish(command_queue);
 }
 
@@ -90,7 +94,9 @@ void CVManager::particleGenerate(float dt, const glm::vec4& gravity)
   clSetKernelArg(generator, 1, sizeof(uint32), &seed);
   clSetKernelArg(generator, 2, 4 * sizeof(float), &gravity);
   clSetKernelArg(generator, 3, sizeof(float), &dt);
+  clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clEnqueueNDRangeKernel(command_queue, generator, 1, nullptr, &geCount, nullptr, 0, nullptr, nullptr);
+  clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
   clFinish(command_queue);
 }
 
@@ -103,7 +109,9 @@ void CVManager::update(float dt, const glm::vec4& gravity, int32 drawCount)
     clSetKernelArg(kernel, 0, sizeof(cl_mem), &clVBO);
     clSetKernelArg(kernel, 1, sizeof(float), &dt);
     clSetKernelArg(kernel, 2, 4 * sizeof(float), &gravity);
+    clEnqueueAcquireGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr, &totalParticles, nullptr, 0, nullptr, nullptr);
+    clEnqueueReleaseGLObjects(command_queue, 1, &clVBO, 0, nullptr, nullptr);
     clFinish(command_queue);
 }
 
@@ -111,6 +119,7 @@ CVManager::~CVManager()
 {
   ret = clFlush(command_queue);
   ret = clFinish(command_queue);
+  this->_programs.clear();
   ret = clReleaseMemObject(clVBO);
   ret = clReleaseCommandQueue(command_queue);
   ret = clReleaseContext(context);

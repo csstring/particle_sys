@@ -15,7 +15,8 @@
 #include "ShaderManager.h"
 
 Camera      _camera;
-Mygui       mygui;
+Window      window;
+Simulator   simulator;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -49,79 +50,43 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     _camera.ProcessMouseMovement(xoffset, yoffset, true);
 }
 
-void cvcheck()
+void leakCheck()
 {
-    cl_uint numPlatforms;
-    clGetPlatformIDs(0, NULL, &numPlatforms);
-    cl_platform_id* platforms = (cl_platform_id*)malloc(sizeof(cl_platform_id) * numPlatforms);
-    clGetPlatformIDs(numPlatforms, platforms, NULL);
-    for (cl_uint i = 0; i < numPlatforms; ++i) {
-    char info[1024];
-    clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 1024, info, NULL);
-    std::cout << "Platform Name: " << info << std::endl;
-
-    clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR, 1024, info, NULL);
-    std::cout << "Platform Vendor: " << info << std::endl;
-
-    clGetPlatformInfo(platforms[i], CL_PLATFORM_VERSION, 1024, info, NULL);
-    std::cout << "Platform Version: " << info << std::endl;
-
-    clGetPlatformInfo(platforms[i], CL_PLATFORM_EXTENSIONS, 1024, info, NULL);
-    std::cout << "Platform Extensions: " << info << std::endl;
-    for (cl_uint i = 0; i < numPlatforms; ++i) {
-    cl_uint numDevices;
-    clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &numDevices);
-    cl_device_id* devices = (cl_device_id*)malloc(sizeof(cl_device_id) * numDevices);
-    clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, numDevices, devices, NULL);
-
-    for (cl_uint j = 0; j < numDevices; ++j) {
-        char info[1024];
-        clGetDeviceInfo(devices[j], CL_DEVICE_NAME, 1024, info, NULL);
-        std::cout << "\tDevice Name: " << info << std::endl;
-
-        size_t maxWorkGroupSize;
-        clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(maxWorkGroupSize), &maxWorkGroupSize, NULL);
-        std::cout << "\tMax Work Group Size: " << maxWorkGroupSize << std::endl;
-
-    }
-    free(devices);
-    }
-    if (strstr(info, "cl_khr_gl_sharing")) {
-        std::cout << "\tSupports cl_khr_gl_sharing" << std::endl;
-    }
-    free(platforms);
-    }
+    system("leaks particle");
 }
 
 int main(int ac, char** av) 
 {
-
+    // atexit(leakCheck);
     if (ac < 2){
-        std::cerr << "input error : obj file path missing\n";
+        std::cerr << "input error : particle max count missing\n";
         return 1;
     } else if (ac > 2) {
         std::cerr << "input error : to many argument\n";
         return 1;
     }
-    cvcheck();
-    Window window;
+    float count = std::atof(av[1]);
+    if (count == 0.0f){
+        std::cerr << "input error : not number";
+        return 1;
+    }
+
     ShaderManager shaderManager;
     SHADERINPUT shaderInput = SHADERINPUT::QURD;
+    Mygui       mygui;
+
     window.initialize();
     _camera.initialize();
     shaderManager.initialize();
     mygui.initialize(window._window);
-
-    Simulator simulator;
-    simulator.initialize(std::ceil(std::atof(av[1]) / 64.0f) * 64.0f);
-    std::cout << std::ceil(std::atof(av[1]) / 64.0f) * 64.0f << std::endl;
+    simulator.initialize(std::ceil(count / 64.0f) * 64.0f);
 
     glfwSetFramebufferSizeCallback(window._window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window._window, mouse_callback);
     glfwSetInputMode(window._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
     glm::mat4 projection = glm::perspective(glm::radians(_camera._fov), ASPECT_RATIO, _camera._zNear, _camera._zFar);
-    const float delta = 1.0f / 60.0f;
+    constexpr float delta = 1.0f / 60.0f;
+
     while (window.isWindowClose() == false)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -139,5 +104,6 @@ int main(int ac, char** av)
         window.bufferSwap();
         glfwPollEvents();
     }
+    glfwDestroyWindow(window._window);
     glfwTerminate();
 }

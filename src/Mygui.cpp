@@ -27,9 +27,9 @@ void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   ImGui::Text("carmera pos x : %f y : %f z : %f", cam._cameraPos.x, cam._cameraPos.y, cam._cameraPos.z);
 
-  if (ImGui::Button("Circle Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+  if (ImGui::Button("Circle Shader"))                           
       shape = SHADERINPUT::CIRCLE;
-  if (ImGui::Button("Qurd Shader"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+  if (ImGui::Button("Qurd Shader"))
       shape = SHADERINPUT::QURD;
   
   ImGui::SliderInt("Particle Count", &simul._drawCount, 0, simul._totalCount);
@@ -40,6 +40,12 @@ void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
   ImGui::SliderInt("Particle Size", &simul._pointSize, 1, 10);
   ImGui::SliderInt("Simul Speed", &simul._speed, 0, 5);
   ImGui::Checkbox("Enable Generator", &simul._scean->_isGeneratorOn);
+
+  // if (ImGui::Button("init Plane scene"))                           
+  //     simul._scean->_CVManager.initPlane();
+  // if (ImGui::Button("init circle scene"))
+  //     simul._scean->_CVManager.initCircle();
+
   ImGui::End();
 }
 

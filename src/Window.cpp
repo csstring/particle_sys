@@ -49,7 +49,7 @@ void Window::processInput(float delta, Camera& camera, Simulator& simul)
     currentSpeed = glfwGetKey(_window, GLFW_KEY_P);
 
     if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(_window, true);
+        glfwSetWindowShouldClose(_window, GLFW_TRUE);
 
     if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
     {
