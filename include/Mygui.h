@@ -7,8 +7,6 @@ class Simulator;
 class Camera;
 class Mygui
 {
-  private:
-    /* data */
   public:
     void initialize(GLFWwindow* window);
     void update(Camera cam, SHADERINPUT& shape, Simulator& simul);

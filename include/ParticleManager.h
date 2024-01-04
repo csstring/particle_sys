@@ -15,7 +15,7 @@ class ParticleManager : Noncopyable
 
   public:
     ParticleManager(uint32 count) : _particleCount(count){};
-    ~ParticleManager();//delete data
+    ~ParticleManager();
 
     void initialize();
     void draw(uint32 drawCount);

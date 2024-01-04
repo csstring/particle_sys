@@ -9,9 +9,9 @@ class Camera;
 class Scean : Noncopyable
 {
   private:
-    ParticleManager _particleManager;
 
   public:
+    ParticleManager _particleManager;
     CVManager _CVManager;
     bool _isGravityOn = false;
     bool _isGeneratorOn = false;

@@ -1,9 +1,9 @@
 CXX = c++ 
 # 컴파일 플래그
 #CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-CXXFLAGS = -std=c++17 -O3# -Wall -Wextra -Werror
+CXXFLAGS = -std=c++17 -O3 -Wall -Wextra -Werror
 # 링크 플래그
-LDFLAGS = #-fsanitize=address -g
+LDFLAGS = -fsanitize=address -g
 # 소스코드 파일 경로
 SRC_DIR = ./src
 # 오브젝트 파일 경로

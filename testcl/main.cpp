@@ -5,9 +5,13 @@
 
  
 #define MAX_SOURCE_SIZE (0x100000)
-
+void check()
+{
+        system("leaks a.out");
+}
 int main(void) {
     // Create the two input vectors
+    atexit(check);
     int i;
     const int LIST_SIZE = 1024;
     int *A = (int*)malloc(sizeof(int)*LIST_SIZE);
@@ -102,5 +106,6 @@ int main(void) {
     free(A);
     free(B);
     free(C);
+    free(source_str);
     return 0;
 }
