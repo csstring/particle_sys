@@ -22,7 +22,7 @@ void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  ImGui::Begin("Mandatory");                          // Create a window called "Hello, world!" and append into it.
+  ImGui::Begin("Mandatory");                         
 
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
   ImGui::Text("carmera pos x : %f y : %f z : %f", cam._cameraPos.x, cam._cameraPos.y, cam._cameraPos.z);
@@ -35,16 +35,16 @@ void Mygui::update(Camera cam, SHADERINPUT& shape, Simulator& simul)
   ImGui::SliderInt("Particle Count", &simul._drawCount, 0, simul._totalCount);
   ImGui::End();
 
-  ImGui::Begin("Bonus"); // Start the Bonus window
+  ImGui::Begin("Bonus"); 
 
   ImGui::SliderInt("Particle Size", &simul._pointSize, 1, 10);
   ImGui::SliderInt("Simul Speed", &simul._speed, 0, 5);
   ImGui::Checkbox("Enable Generator", &simul._scean->_isGeneratorOn);
 
-  // if (ImGui::Button("init Plane scene"))                           
-  //     simul._scean->_CVManager.initPlane();
-  // if (ImGui::Button("init circle scene"))
-  //     simul._scean->_CVManager.initCircle();
+  if (ImGui::Button("init Plane scene"))                           
+      simul._scean->_CVManager.initPlane();
+  if (ImGui::Button("init circle scene"))
+      simul._scean->_CVManager.initCircle();
 
   ImGui::End();
 }

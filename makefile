@@ -1,26 +1,22 @@
 CXX = c++ 
-# 컴파일 플래그
-#CXXFLAGS = -Wall -Wextra -Werror -std=c++17
 CXXFLAGS = -std=c++17 -O3 -Wall -Wextra -Werror
-# 링크 플래그
-LDFLAGS = -fsanitize=address -g
-# 소스코드 파일 경로
+LDFLAGS = #-fsanitize=address -g
+
 SRC_DIR = ./src
-# 오브젝트 파일 경로
-OBJ_DIR = ./obj
-# 헤더 파일 경로
+
+OBJ_DIR = ./
+
 INC_DIR = ./include
-# 라이브러리 파일 경로
+
 LIB_DIR = ./lib-universal
 
-# GLFW 라이브러리 파일 경로
 GLFW_LIB_DIR = $(LIB_DIR)
 
-# 바이너리 파일
+
 TARGET = ./particle
-# 소스 파일 리스트. Searching in src, src/math
+
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/imgui/*.cpp)
-# 오브젝트 파일 리스트
+
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(patsubst $(SRC_DIR)/imgui/%.cpp,$(OBJ_DIR)/%.o,$(SOURCES)))
 
 all: $(TARGET)
@@ -44,4 +40,4 @@ re :
 	${MAKE} fclean 
 	${MAKE} all
 
-.PHONY: all clean fclean
+.PHONY: all clean fclean re

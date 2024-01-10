@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include "GLM/gtc/matrix_transform.hpp"
 void Camera::update(void)
 {
     _view = glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
