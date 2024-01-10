@@ -4,19 +4,12 @@
 #include "shader.h"
 #include "Simulator.h"
 #include "Camera.h"
-#include <chrono>
-#include <cmath>
 #include <iostream>
-#include <unistd.h>
-#include "GLM/gtc/matrix_transform.hpp"
-#include "GLM/gtx/transform.hpp"
 #include "Mygui.h"
 #include <OpenCL/opencl.h>
 #include "ShaderManager.h"
 
 Camera      _camera;
-Window      window;
-Simulator   simulator;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -74,12 +67,14 @@ int main(int ac, char** av)
     ShaderManager shaderManager;
     SHADERINPUT shaderInput = SHADERINPUT::QURD;
     Mygui       mygui;
-
+    Window      window;
+    Simulator*  simulator = new Simulator();
+    
     window.initialize();
     _camera.initialize();
     shaderManager.initialize();
     mygui.initialize(window._window);
-    simulator.initialize(std::ceil(count / 64.0f) * 64.0f);
+    simulator->initialize(std::ceil(count / 64.0f) * 64.0f);
 
     glfwSetFramebufferSizeCallback(window._window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window._window, mouse_callback);
@@ -90,20 +85,21 @@ int main(int ac, char** av)
     while (window.isWindowClose() == false)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mygui.update(_camera, shaderInput, simulator);
-        window.processInput(delta , _camera, simulator);
+        mygui.update(_camera, shaderInput, *simulator);
+        window.processInput(delta , _camera, *simulator);
         _camera.update();
-        glPointSize(simulator._pointSize);
+        glPointSize(simulator->_pointSize);
         shaderManager.use(shaderInput);
         shaderManager.setMat4("projection", projection);
         shaderManager.setMat4("view", _camera._view);
         shaderManager.setVec4("cursorPos", projection * _camera._view * _camera.getWorldCursorPos());
-        simulator.update(delta * simulator._speed, _camera);
-        simulator.draw();
+        simulator->update(delta * simulator->_speed, _camera);
+        simulator->draw();
         mygui.render();
         window.bufferSwap();
         glfwPollEvents();
     }
+    delete simulator;
     glfwDestroyWindow(window._window);
     glfwTerminate();
 }

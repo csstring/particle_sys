@@ -2,7 +2,6 @@
 #include <OpenCL/opencl.h>
 #include "Common.h"
 #include "KernelProgram.h"
-#include <unordered_map>
 #include <random>
 class CVManager
 {

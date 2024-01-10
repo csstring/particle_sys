@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <unistd.h>
 #include "GL/glew.h"
 #include "shader.h"
 

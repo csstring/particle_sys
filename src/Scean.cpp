@@ -6,7 +6,6 @@ void Scean::initialize()
 {
   _particleManager.initialize();
   _CVManager.initialize(_particleManager._VBO, _particleManager.getParticleCount());
-  _CVManager.initCircle();
   _CVManager.initPlane();
 }
 

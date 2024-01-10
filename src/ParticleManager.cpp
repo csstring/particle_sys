@@ -2,8 +2,6 @@
 #include "GL/glew.h"
 #include "Camera.h"
 #include "Particle.h"
-#include <numeric>
-#include <random>
 
 ParticleManager::~ParticleManager()
 {
@@ -17,16 +15,14 @@ void ParticleManager::initialize()
   glBindVertexArray(_VAO);
   glGenBuffers(1, &_VBO);
   glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), nullptr, GL_STATIC_DRAW);
-  // Position
+  glBufferData(GL_ARRAY_BUFFER, _particleCount * sizeof(Particle), nullptr, GL_DYNAMIC_DRAW);
+
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _position));
   glEnableVertexAttribArray(0);
 
-  // Velocity
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _velocity));
   glEnableVertexAttribArray(1);
 
-  // Color
   glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, _life));
   glEnableVertexAttribArray(2);
 
